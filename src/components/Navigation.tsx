@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import AppsIcon from '@material-ui/icons/Apps'
@@ -16,9 +17,24 @@ const Navigation: React.FC = () => {
         setValue(newValue)
       }}
     >
-      <BottomNavigationAction label="Places" icon={<AppsIcon />} />
-      <BottomNavigationAction label="Members" icon={<PersonIcon />} />
-      <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
+      <BottomNavigationAction
+        component={RouterLink}
+        to="/places"
+        label="Places"
+        icon={<AppsIcon />}
+      />
+      <BottomNavigationAction
+        component={RouterLink}
+        to="/members"
+        label="Members"
+        icon={<PersonIcon />}
+      />
+      <BottomNavigationAction
+        component={RouterLink}
+        to="/settings"
+        label="Settings"
+        icon={<SettingsIcon />}
+      />
     </BottomNavigation>
   )
 }

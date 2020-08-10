@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
+import UserAvatar from './img/userAvatar.png'
 
 const useStyles = makeStyles({
   root: {
@@ -44,10 +45,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   const classes = useStyles()
   return (
     <Card className={classes.root}>
-      <CardMedia
-        className={classes.media}
-        src="/img/user-avatar.png"
-      ></CardMedia>
+      <CardMedia className={classes.media} image={UserAvatar}></CardMedia>
       <div className={classes.content}>
         <CardContent>
           <Typography variant="h5">{placeName}</Typography>

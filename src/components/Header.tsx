@@ -1,32 +1,44 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import IconButton from '@material-ui/core/IconButton'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import Typography from '@material-ui/core/Typography'
-
-const useStyles = makeStyles({
-  root: {
-    display: 'grid',
-    gridTemplate: '100%/1fr 5fr 1fr',
-    alignItems: 'center',
-  },
-})
+import Grid from '@material-ui/core/Grid'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface HeaderProps {
   headerText: string
+  previousPage?: string
+  nextPage?: string
 }
 
-const Header: React.FC<HeaderProps> = ({ headerText }) => {
-  const classes = useStyles()
+const Header: React.FC<HeaderProps> = ({
+  headerText,
+  previousPage,
+  nextPage,
+}) => {
   return (
-    <div className={classes.root}>
-      <IconButton>
-        <ChevronLeftIcon fontSize="inherit" />
-      </IconButton>
-      <Typography align="center" variant="h4">
-        {headerText}
-      </Typography>
-    </div>
+    <Grid container alignItems="center">
+      <Grid item xs={2}>
+        {previousPage && (
+          <IconButton component={RouterLink} to={previousPage}>
+            <ChevronLeftIcon fontSize="inherit" />
+          </IconButton>
+        )}
+      </Grid>
+      <Grid item xs={8}>
+        <Typography align="center" variant="h4">
+          {headerText}
+        </Typography>
+      </Grid>
+      <Grid item xs={2}>
+        {nextPage && (
+          <IconButton component={RouterLink} to={nextPage}>
+            <PersonAddIcon htmlColor="black" fontSize="inherit" />
+          </IconButton>
+        )}
+      </Grid>
+    </Grid>
   )
 }
 

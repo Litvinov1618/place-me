@@ -20,7 +20,7 @@ const testMembers = [
 const Members: React.FC = () => {
   return (
     <div>
-      <Header headerText="Members" nextPage="/new-user" />
+      <Header headerText="Members" />
       <GridList spacing={0} cellHeight={56} cols={1}>
         {testMembers.map(({ userEmail, balance }) => (
           <Grid container alignItems="center">

@@ -2,7 +2,6 @@ import React from 'react'
 import Navigation from './Navigation'
 import Places from './Places'
 import Members from './Members'
-import AddNewUser from './AddNewUser'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
@@ -30,9 +29,6 @@ const App: React.FC = () => {
             </Route>
             <Route path="/members">
               <Members />
-            </Route>
-            <Route path="/new-user">
-              <AddNewUser />
             </Route>
             {/* <Route path="/settings">Settings</Route> */}
           </Switch>

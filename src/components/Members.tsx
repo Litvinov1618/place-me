@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import userAvatar from './img/userAvatar.png'
 import Header from './Header'
 import { Link } from 'react-router-dom'
+import Container from '@material-ui/core/Container'
 
 const testMembers = [
   {
@@ -23,28 +24,33 @@ const Members: React.FC = () => {
   return (
     <div>
       <Header headerText="Members" nextPage="/new-user" />
-      <List>
-        {testMembers.map(({ userEmail, balance }) => (
-          <ListItem
-            button
-            component={Link}
-            to="/user-page"
-            divider
-            alignItems="center"
-            key={userEmail}
-          >
-            <Grid item xs={2}>
-              <Avatar src={userAvatar} />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="subtitle1">{userEmail}</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="subtitle1">{`$ ${balance}`}</Typography>
-            </Grid>
-          </ListItem>
-        ))}
-      </List>
+      <Container>
+        <List>
+          {testMembers.map(({ userEmail, balance }) => (
+            <ListItem
+              button
+              component={Link}
+              to="/user-page"
+              divider
+              alignItems="center"
+              key={userEmail}
+            >
+              <Grid item xs={2}>
+                <Avatar src={userAvatar} />
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="subtitle1">{userEmail}</Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography
+                  align="right"
+                  variant="subtitle1"
+                >{`$ ${balance}`}</Typography>
+              </Grid>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
     </div>
   )
 }

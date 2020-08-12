@@ -3,6 +3,7 @@ import PlaceCard from './PlaceCard'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Header from './Header'
+import Container from '@material-ui/core/Container'
 
 const testPlaces = [
   {
@@ -51,25 +52,27 @@ const Places: React.FC = () => {
   return (
     <div>
       <Header headerText="Places" />
-      <List>
-        {testPlaces.map(
-          ({ placeName, isFree, userEmail, visitorsCount, dateRange }) => (
-            <ListItem key={placeName}>
-              {isFree ? (
-                <PlaceCard placeName={placeName} isFree={isFree} />
-              ) : (
-                <PlaceCard
-                  placeName={placeName}
-                  isFree={isFree}
-                  userEmail={userEmail}
-                  visitorsCount={visitorsCount}
-                  dateRange={dateRange}
-                />
-              )}
-            </ListItem>
-          )
-        )}
-      </List>
+      <Container>
+        <List>
+          {testPlaces.map(
+            ({ placeName, isFree, userEmail, visitorsCount, dateRange }) => (
+              <ListItem disableGutters key={placeName}>
+                {isFree ? (
+                  <PlaceCard placeName={placeName} isFree={isFree} />
+                ) : (
+                  <PlaceCard
+                    placeName={placeName}
+                    isFree={isFree}
+                    userEmail={userEmail}
+                    visitorsCount={visitorsCount}
+                    dateRange={dateRange}
+                  />
+                )}
+              </ListItem>
+            )
+          )}
+        </List>
+      </Container>
     </div>
   )
 }

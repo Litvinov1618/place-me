@@ -1,6 +1,7 @@
 import React from 'react'
 import Navigation from './Navigation'
 import Places from './Places'
+import ReservePlace from './ReservePlace'
 import Members from './Members'
 import AddNewUser from './AddNewUser'
 import UserPage from './UserPage'
@@ -37,6 +38,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/user-page">
               <UserPage />
+            </Route>
+            <Route path="/reserve-place">
+              <ReservePlace />
             </Route>
           </Switch>
         </div>

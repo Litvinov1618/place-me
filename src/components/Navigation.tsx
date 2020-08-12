@@ -5,9 +5,21 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import AppsIcon from '@material-ui/icons/Apps'
 import PersonIcon from '@material-ui/icons/Person'
 // import SettingsIcon from '@material-ui/icons/Settings'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+  root: {
+    position: 'fixed',
+    top: 'auto',
+    bottom: 0,
+    width: '100%',
+    maxWidth: '444px',
+  },
+})
 
 const Navigation: React.FC = () => {
   const [value, setValue] = useState(null)
+  const classes = useStyles()
   return (
     <BottomNavigation
       showLabels
@@ -15,6 +27,7 @@ const Navigation: React.FC = () => {
       onChange={(event, newValue) => {
         setValue(newValue)
       }}
+      className={classes.root}
     >
       <BottomNavigationAction
         component={RouterLink}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
@@ -70,7 +71,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           <div>
             <Divider />
             <CardActions>
-              <Button color="primary">Reserve</Button>
+              <Button to="/reserve-place" component={Link} color="primary">
+                Reserve
+              </Button>
             </CardActions>
           </div>
         )}

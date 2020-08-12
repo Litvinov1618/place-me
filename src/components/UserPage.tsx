@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Switch from '@material-ui/core/Switch'
+import Container from '@material-ui/core/Container'
 
 const useStyles = makeStyles({
   avatarSize: {
@@ -38,50 +39,54 @@ const UserPage: React.FC = () => {
   return (
     <div>
       <Header headerText={userEmail} previousPage="/members" />
-      <List>
-        <ListItem>
-          <Avatar className={avatarSize} src={UserAvatar} />
-        </ListItem>
-        <ListItem divider>
-          <Grid container justify="space-between">
-            <Grid item>
-              <Typography variant="subtitle1">Balance:</Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle1">{`$ ${balance}`}</Typography>
-            </Grid>
-          </Grid>
-        </ListItem>
-        <ListItem divider>
-          <Grid container justify="space-between">
-            <Grid item>
-              <Typography variant="subtitle1">Visits Left:</Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle1">{visitsLeft}</Typography>
-            </Grid>
-          </Grid>
-        </ListItem>
-        <ListItem divider>
-          <Grid container justify="space-between">
-            <Grid item>
-              <Typography variant="subtitle1">Show reserved seats:</Typography>
-            </Grid>
-            <Grid item>
-              <Switch
-                onChange={switchDateRangemenu}
-                color="primary"
-                edge="end"
-              />
-            </Grid>
-          </Grid>
-        </ListItem>
-        {showDateRange && (
+      <Container>
+        <List>
           <ListItem>
-            <Typography variant="subtitle1">{`${dateRange?.firstDay} - ${dateRange?.lastDay}`}</Typography>
+            <Avatar className={avatarSize} src={UserAvatar} />
           </ListItem>
-        )}
-      </List>
+          <ListItem divider>
+            <Grid container justify="space-between">
+              <Grid item>
+                <Typography variant="subtitle1">Balance:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="subtitle1">{`$ ${balance}`}</Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+          <ListItem divider>
+            <Grid container justify="space-between">
+              <Grid item>
+                <Typography variant="subtitle1">Visits Left:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="subtitle1">{visitsLeft}</Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+          <ListItem divider>
+            <Grid container justify="space-between">
+              <Grid item>
+                <Typography variant="subtitle1">
+                  Show reserved seats:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Switch
+                  onChange={switchDateRangemenu}
+                  color="primary"
+                  edge="end"
+                />
+              </Grid>
+            </Grid>
+          </ListItem>
+          {showDateRange && (
+            <ListItem>
+              <Typography variant="subtitle1">{`${dateRange?.firstDay} - ${dateRange?.lastDay}`}</Typography>
+            </ListItem>
+          )}
+        </List>
+      </Container>
     </div>
   )
 }

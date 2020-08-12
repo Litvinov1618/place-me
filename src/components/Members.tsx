@@ -1,10 +1,12 @@
 import React from 'react'
-import GridList from '@material-ui/core/GridList'
-import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import Avatar from '@material-ui/core/Avatar'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import userAvatar from './img/userAvatar.png'
 import Header from './Header'
+import { Link } from 'react-router-dom'
 
 const testMembers = [
   {
@@ -20,10 +22,17 @@ const testMembers = [
 const Members: React.FC = () => {
   return (
     <div>
-      <Header headerText="Members" />
-      <GridList spacing={0} cellHeight={56} cols={1}>
+      <Header headerText="Members" nextPage="/new-user" />
+      <List>
         {testMembers.map(({ userEmail, balance }) => (
-          <Grid container alignItems="center">
+          <ListItem
+            button
+            component={Link}
+            to="/user-page"
+            divider
+            alignItems="center"
+            key={userEmail}
+          >
             <Grid item xs={2}>
               <Avatar src={userAvatar} />
             </Grid>
@@ -33,9 +42,9 @@ const Members: React.FC = () => {
             <Grid item xs={2}>
               <Typography variant="subtitle1">{`$ ${balance}`}</Typography>
             </Grid>
-          </Grid>
+          </ListItem>
         ))}
-      </GridList>
+      </List>
     </div>
   )
 }

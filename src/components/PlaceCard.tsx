@@ -12,7 +12,7 @@ import UserAvatar from './img/userAvatar.png'
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    width: '344px',
+    width: '100%',
     margin: '0 auto 10px auto',
   },
   media: {
@@ -31,7 +31,10 @@ interface PlaceCardProps {
   placeName: string
   isFree: boolean
   userEmail?: string
-  dateRange?: string
+  dateRange?: {
+    firstDay: string
+    lastDay: string
+  }
   visitorsCount?: number
 }
 
@@ -49,24 +52,25 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
       <div className={classes.content}>
         <CardContent>
           <Typography variant="h5">{placeName}</Typography>
-          {!isFree ? (
+          {isFree ? (
+            <Typography color="textSecondary">Free</Typography>
+          ) : (
             <div>
               <Typography color="textSecondary">{userEmail}</Typography>
-              <Typography color="textSecondary">{dateRange}</Typography>
+              <Typography color="textSecondary">
+                {`${dateRange?.firstDay} - ${dateRange?.lastDay}`}
+              </Typography>
               <Typography color="textSecondary">
                 Visitors: {visitorsCount}
               </Typography>
             </div>
-          ) : (
-            <Typography color="textSecondary">Free</Typography>
           )}
         </CardContent>
         {isFree && (
           <div>
             <Divider />
             <CardActions>
-              <Button color="primary">Action</Button>
-              <Button color="primary">Action</Button>
+              <Button color="primary">Reserve</Button>
             </CardActions>
           </div>
         )}

@@ -7,7 +7,7 @@ import PersonIcon from '@material-ui/icons/Person'
 // import SettingsIcon from '@material-ui/icons/Settings'
 
 const Navigation: React.FC = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState(null)
   return (
     <BottomNavigation
       showLabels

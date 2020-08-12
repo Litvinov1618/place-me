@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </Grid>
       <Grid item xs={8}>
-        <Typography align="center" variant="h4">
+        <Typography noWrap={true} align="center" variant="h4">
           {headerText}
         </Typography>
       </Grid>

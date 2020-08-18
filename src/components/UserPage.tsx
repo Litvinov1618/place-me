@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Switch from '@material-ui/core/Switch'
 import Container from '@material-ui/core/Container'
+import SimpleDialog2 from './SimpleDialog2'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles({
   avatarSize: {
@@ -19,7 +22,7 @@ const useStyles = makeStyles({
 })
 
 const testUserData = {
-  userEmail: 'randy@email.com',
+  userName: 'Randy',
   balance: 135,
   visitsLeft: 4,
   dateRange: {
@@ -29,16 +32,22 @@ const testUserData = {
 }
 
 const UserPage: React.FC = () => {
-  const { userEmail, balance, visitsLeft, dateRange } = testUserData
+  const { userName, balance, visitsLeft, dateRange } = testUserData
   const { avatarSize } = useStyles()
   const [showDateRange, setShowDateRange] = useState(false)
   const switchDateRangemenu = () => {
     if (showDateRange) setShowDateRange(false)
     else setShowDateRange(true)
   }
+
+  const [open, setOpen] = useState(false)
+  const handleClick = () => {
+    setOpen(true)
+  }
+  const handleClose = () => setOpen(false)
   return (
     <div>
-      <Header headerText={userEmail} previousPage="/members" />
+      <Header headerText={userName} previousPage="/members" />
       <Container>
         <List>
           <ListItem>
@@ -50,7 +59,15 @@ const UserPage: React.FC = () => {
                 <Typography variant="subtitle1">Balance:</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="subtitle1">{`$ ${balance}`}</Typography>
+                <Typography variant="subtitle1">
+                  {`$ ${balance}`}
+                  <IconButton
+                    style={{ padding: '0 0 0 5px' }}
+                    onClick={handleClick}
+                  >
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </Typography>
               </Grid>
             </Grid>
           </ListItem>
@@ -86,6 +103,11 @@ const UserPage: React.FC = () => {
             </ListItem>
           )}
         </List>
+        <SimpleDialog2
+          open={open}
+          onClose={handleClose}
+          dialogTitle="Balance"
+        />
       </Container>
     </div>
   )

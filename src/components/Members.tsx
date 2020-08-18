@@ -11,11 +11,11 @@ import Container from '@material-ui/core/Container'
 
 const testMembers = [
   {
-    userEmail: 'randy@gmail.com',
+    userName: 'Randy',
     balance: 49,
   },
   {
-    userEmail: 'john@gmail.com',
+    userName: 'John',
     balance: 135,
   },
 ]
@@ -26,20 +26,20 @@ const Members: React.FC = () => {
       <Header headerText="Members" nextPage="/new-user" />
       <Container>
         <List>
-          {testMembers.map(({ userEmail, balance }) => (
+          {testMembers.map(({ userName, balance }) => (
             <ListItem
               button
               component={Link}
               to="/user-page"
               divider
               alignItems="center"
-              key={userEmail}
+              key={userName}
             >
               <Grid item xs={2}>
                 <Avatar src={userAvatar} />
               </Grid>
               <Grid item xs={8}>
-                <Typography variant="subtitle1">{userEmail}</Typography>
+                <Typography variant="subtitle1">{userName}</Typography>
               </Grid>
               <Grid item xs={2}>
                 <Typography

@@ -16,12 +16,23 @@ const AddNewUser: React.FC = () => {
           </Button>
         </Grid>
         <Grid item xs={10}>
-          <TextField variant="filled" label="Email" fullWidth />
+          <TextField variant="outlined" label="Email" fullWidth />
+        </Grid>
+        <Grid
+          style={{ padding: '8px' }}
+          container
+          justify="space-around"
+          xs={10}
+        >
+          <Grid item xs={5}>
+            <TextField variant="outlined" fullWidth label="Balance" />
+          </Grid>
+          <Grid item xs={5}>
+            <TextField variant="outlined" fullWidth label="Visits count" />
+          </Grid>
         </Grid>
         <Grid item xs={3}>
-          <Button fullWidth variant="contained">
-            Register
-          </Button>
+          <Button variant="contained">Register</Button>
         </Grid>
       </Grid>
     </div>

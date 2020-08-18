@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import UserAvatar from './img/userAvatar.png'
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
+import Grid from '@material-ui/core/Grid'
 
 const useStyles = makeStyles({
   root: {
@@ -20,29 +22,23 @@ const useStyles = makeStyles({
     width: '136px',
     height: '188px',
   },
-  content: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
 })
 
 interface PlaceCardProps {
   placeName: string
   isFree: boolean
-  userEmail?: string
+  visitorsCount: number
+  userName?: string
   dateRange?: {
     firstDay: string
     lastDay: string
   }
-  visitorsCount?: number
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({
   placeName,
   isFree,
-  userEmail,
+  userName,
   dateRange,
   visitorsCount,
 }) => {
@@ -50,21 +46,24 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   return (
     <Card className={classes.root}>
       <CardMedia className={classes.media} image={UserAvatar}></CardMedia>
-      <div className={classes.content}>
+      <Grid container direction="column" justify="space-between">
         <CardContent>
-          <Typography variant="h5">{placeName}</Typography>
+          <Grid alignItems="center" justify="space-between" container>
+            <Typography variant="h5">{placeName}</Typography>
+            <Typography color="textSecondary">
+              {visitorsCount}&nbsp;
+              <PeopleAltIcon style={{ verticalAlign: 'middle' }} />
+            </Typography>
+          </Grid>
           {isFree ? (
             <Typography color="textSecondary">Free</Typography>
           ) : (
-            <div>
-              <Typography color="textSecondary">{userEmail}</Typography>
+            <>
               <Typography color="textSecondary">
-                {`${dateRange?.firstDay} - ${dateRange?.lastDay}`}
+                Reserved till {dateRange?.lastDay}
               </Typography>
-              <Typography color="textSecondary">
-                Visitors: {visitorsCount}
-              </Typography>
-            </div>
+              <Typography color="textSecondary">{userName}</Typography>
+            </>
           )}
         </CardContent>
         {isFree && (
@@ -77,7 +76,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
             </CardActions>
           </div>
         )}
-      </div>
+      </Grid>
     </Card>
   )
 }

@@ -60,7 +60,7 @@ const testPlaces = [
 
 const Places: React.FC = () => {
   return (
-    <div>
+    <>
       <Header headerText="Places" />
       <Container>
         <Grid container justify="space-around">
@@ -102,7 +102,7 @@ const Places: React.FC = () => {
           )}
         </List>
       </Container>
-    </div>
+    </>
   )
 }
 

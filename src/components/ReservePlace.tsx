@@ -27,7 +27,7 @@ const ReservePlace: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setEmail(event.target.value as string)
   }
-  const classes = useStyles()
+  const { root } = useStyles()
 
   // Snackbar
   const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -60,7 +60,7 @@ const ReservePlace: React.FC = () => {
   // \Dialog
 
   return (
-    <div>
+    <>
       <Header headerText="Reserve Place" previousPage="/places" />
       <Container>
         <FormControl fullWidth margin="dense">
@@ -68,12 +68,7 @@ const ReservePlace: React.FC = () => {
           <Select value={email} onChange={handleChange} labelId="select-user">
             <MenuItem value="randy@email.com">randy@email.com</MenuItem>
             <MenuItem value="john@email.com">john@email.com</MenuItem>
-            <MenuItem
-              className={classes.root}
-              button
-              component={Link}
-              to="/new-user"
-            >
+            <MenuItem className={root} button component={Link} to="/new-user">
               Add new user
             </MenuItem>
           </Select>
@@ -111,7 +106,7 @@ const ReservePlace: React.FC = () => {
           }
         />
       </Container>
-    </div>
+    </>
   )
 }
 

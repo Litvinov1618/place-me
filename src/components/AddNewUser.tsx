@@ -5,7 +5,7 @@ import { AddAPhoto } from '@material-ui/icons'
 
 const AddNewUser: React.FC = () => {
   return (
-    <div>
+    <>
       <Header headerText="New user" previousPage="/members" />
       <Grid style={{ marginTop: '5px' }} container justify="center" spacing={2}>
         <Grid item xs={6}>
@@ -36,7 +36,7 @@ const AddNewUser: React.FC = () => {
           <Button variant="contained">Register</Button>
         </Grid>
       </Grid>
-    </div>
+    </>
   )
 }
 

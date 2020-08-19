@@ -19,9 +19,9 @@ const useStyles = makeStyles({
 })
 
 const App: React.FC = () => {
-  const classes = useStyles()
+  const { root } = useStyles()
   return (
-    <Container disableGutters={true} maxWidth="xs" className={classes.root}>
+    <Container disableGutters={true} maxWidth="xs" className={root}>
       <Router>
         <div>
           <Switch>
@@ -43,8 +43,6 @@ const App: React.FC = () => {
             <Route path="/reserve-place">
               <ReservePlace />
             </Route>
-          </Switch>
-          <Switch>
             <Route path="/place-info">
               <ReservedPlaceInfo />
             </Route>

@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 const Navigation: React.FC = () => {
   const [value, setValue] = useState(null)
-  const classes = useStyles()
+  const { root } = useStyles()
   return (
     <BottomNavigation
       showLabels
@@ -24,7 +24,7 @@ const Navigation: React.FC = () => {
       onChange={(event, newValue) => {
         setValue(newValue)
       }}
-      className={classes.root}
+      className={root}
     >
       <BottomNavigationAction
         component={RouterLink}

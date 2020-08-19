@@ -48,7 +48,7 @@ const UserPage: React.FC = () => {
   }
   const handleClose = () => setOpen(false)
   return (
-    <div>
+    <>
       <Header headerText={userName} previousPage="/members" />
       <Container>
         <List>
@@ -119,7 +119,7 @@ const UserPage: React.FC = () => {
           dialogTitle="Balance"
         />
       </Container>
-    </div>
+    </>
   )
 }
 

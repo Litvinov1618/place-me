@@ -24,7 +24,7 @@ const testMembers = [
 
 const Members: React.FC = () => {
   return (
-    <div>
+    <>
       <Header headerText="Members" nextPage="/new-user" />
       <Container>
         <List>
@@ -53,7 +53,7 @@ const Members: React.FC = () => {
           ))}
         </List>
       </Container>
-    </div>
+    </>
   )
 }
 

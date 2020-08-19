@@ -45,7 +45,7 @@ const App: React.FC = () => {
             </Route>
           </Switch>
           <Switch>
-            <Route path="/reserved-place-info">
+            <Route path="/place-info">
               <ReservedPlaceInfo />
             </Route>
           </Switch>

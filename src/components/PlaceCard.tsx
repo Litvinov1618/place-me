@@ -73,6 +73,14 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
         <div>
           <Divider />
           <CardActions>
+            <Link
+              underline="none"
+              className={classes.link}
+              component={RouterLink}
+              to="/place-info"
+            >
+              View
+            </Link>
             {isAvailable ? (
               <Link
                 underline="none"
@@ -84,12 +92,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
                 Reserve
               </Link>
             ) : (
-              <Link
-                underline="none"
-                className={classes.blackLink}
-                to="Reserved-place-info"
-                component={RouterLink}
-              >
+              <Link underline="none" className={classes.blackLink}>
                 Reserved till {dateRange?.lastDay}
               </Link>
             )}

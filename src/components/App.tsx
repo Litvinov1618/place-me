@@ -4,6 +4,7 @@ import Places from './Places'
 import ReservePlace from './ReservePlace'
 import Members from './Members'
 import AddNewUser from './AddNewUser'
+import ReservedPlaceInfo from './ReservedPlaceInfo'
 import UserPage from './UserPage'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
@@ -41,6 +42,11 @@ const App: React.FC = () => {
             </Route>
             <Route path="/reserve-place">
               <ReservePlace />
+            </Route>
+          </Switch>
+          <Switch>
+            <Route path="/reserved-place-info">
+              <ReservedPlaceInfo />
             </Route>
           </Switch>
         </div>

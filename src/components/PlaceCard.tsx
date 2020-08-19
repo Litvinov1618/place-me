@@ -15,16 +15,13 @@ const useStyles = makeStyles({
     display: 'flex',
     width: '100%',
     margin: '0 auto 10px auto',
+    height: '141px',
   },
   media: {
     width: '136px',
     height: '188px',
   },
   link: {
-    padding: '6px 8px',
-  },
-  blackLink: {
-    color: 'black',
     padding: '6px 8px',
   },
 })
@@ -59,15 +56,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
               <PeopleAltIcon style={{ verticalAlign: 'middle' }} />
             </Typography>
           </Grid>
-          {isAvailable ? (
-            <Typography color="textSecondary">Available</Typography>
-          ) : (
-            <>
-              <Typography color="textSecondary">
-                Reserved till {dateRange?.lastDay}
-              </Typography>
-              <Typography color="textSecondary">{userName}</Typography>
-            </>
+          {!isAvailable && (
+            <Typography color="textSecondary">{userName}</Typography>
           )}
         </CardContent>
         <div>
@@ -92,7 +82,11 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
                 Reserve
               </Link>
             ) : (
-              <Link underline="none" className={classes.blackLink}>
+              <Link
+                color="textSecondary"
+                underline="none"
+                className={classes.link}
+              >
                 Reserved till {dateRange?.lastDay}
               </Link>
             )}

@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import Header from './Header'
-import Avatar from '@material-ui/core/Avatar'
+import {
+  Avatar,
+  List,
+  ListItem,
+  Grid,
+  Typography,
+  Switch,
+  Container,
+  IconButton,
+} from '@material-ui/core'
 import UserAvatar from './img/userAvatar.png'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import Switch from '@material-ui/core/Switch'
-import Container from '@material-ui/core/Container'
 import SimpleDialog2 from './SimpleDialog2'
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
-import IconButton from '@material-ui/core/IconButton'
+import { AddCircleOutline } from '@material-ui/icons'
 
 const useStyles = makeStyles({
   avatarSize: {
@@ -65,7 +67,7 @@ const UserPage: React.FC = () => {
                     style={{ padding: '0 0 0 5px' }}
                     onClick={handleClick}
                   >
-                    <AddCircleOutlineIcon />
+                    <AddCircleOutline />
                   </IconButton>
                 </Typography>
               </Grid>
@@ -83,7 +85,7 @@ const UserPage: React.FC = () => {
                     style={{ padding: '0 0 0 5px' }}
                     onClick={handleClick}
                   >
-                    <AddCircleOutlineIcon />
+                    <AddCircleOutline />
                   </IconButton>
                 </Typography>
               </Grid>

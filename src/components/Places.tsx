@@ -1,12 +1,14 @@
 import React from 'react'
-import PlaceCard from './PlaceCard'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
+import {
+  List,
+  ListItem,
+  Container,
+  Grid,
+  Select,
+  MenuItem,
+} from '@material-ui/core'
 import Header from './Header'
-import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
+import PlaceCard from './PlaceCard'
 
 const testPlaces = [
   {

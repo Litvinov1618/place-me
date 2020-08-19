@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
 import SimpleDialog from './SimpleDialog'
 import Header from './Header'
-import Select from '@material-ui/core/Select'
-import Grid from '@material-ui/core/Grid'
-import { FormControl } from '@material-ui/core'
-import { InputLabel } from '@material-ui/core'
-import { MenuItem } from '@material-ui/core'
-import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
+import {
+  Select,
+  Grid,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Container,
+  Button,
+  Snackbar,
+  IconButton,
+} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
-import Close from '@material-ui/icons/Close'
+import { Close } from '@material-ui/icons'
 
 const useStyles = makeStyles({
   root: {

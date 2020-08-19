@@ -1,9 +1,11 @@
 import React from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import {
+  Dialog,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core'
 
 interface SimpleDialogProps {
   open: boolean

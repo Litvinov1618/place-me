@@ -1,8 +1,5 @@
 import React from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
+import { Dialog, DialogTitle, TextField, Button } from '@material-ui/core'
 
 interface SimpleDialogProps {
   open: boolean

@@ -1,14 +1,16 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link as RouterLink } from 'react-router-dom'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardActions from '@material-ui/core/CardActions'
-import Typography from '@material-ui/core/Typography'
-import Link from '@material-ui/core/Link'
-import Divider from '@material-ui/core/Divider'
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
-import Grid from '@material-ui/core/Grid'
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Link,
+  Divider,
+  Grid,
+} from '@material-ui/core'
+import { PeopleAlt } from '@material-ui/icons'
 
 const useStyles = makeStyles({
   root: {
@@ -53,7 +55,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
             <Typography variant="h5">{placeName}</Typography>
             <Typography color="textSecondary">
               {visitorsCount}&nbsp;
-              <PeopleAltIcon style={{ verticalAlign: 'middle' }} />
+              <PeopleAlt style={{ verticalAlign: 'middle' }} />
             </Typography>
           </Grid>
           {!isAvailable && (

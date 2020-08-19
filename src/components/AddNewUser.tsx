@@ -1,9 +1,7 @@
 import React from 'react'
-import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid'
 import Header from './Header'
-import Button from '@material-ui/core/Button'
-import AddAPhoto from '@material-ui/icons/AddAPhoto'
+import { TextField, Grid, Button } from '@material-ui/core'
+import { AddAPhoto } from '@material-ui/icons'
 
 const AddNewUser: React.FC = () => {
   return (

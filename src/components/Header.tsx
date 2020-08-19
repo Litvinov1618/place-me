@@ -1,9 +1,6 @@
 import React from 'react'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import IconButton from '@material-ui/core/IconButton'
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
+import { ChevronLeft, PersonAdd } from '@material-ui/icons'
+import { IconButton, Typography, Grid } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom'
 
 interface HeaderProps {
@@ -22,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({
       <Grid item xs={2}>
         {previousPage && (
           <IconButton component={RouterLink} to={previousPage}>
-            <ChevronLeftIcon fontSize="inherit" />
+            <ChevronLeft fontSize="inherit" />
           </IconButton>
         )}
       </Grid>
@@ -34,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({
       <Grid item xs={2}>
         {nextPage && (
           <IconButton component={RouterLink} to={nextPage}>
-            <PersonAddIcon htmlColor="black" fontSize="inherit" />
+            <PersonAdd htmlColor="black" fontSize="inherit" />
           </IconButton>
         )}
       </Grid>

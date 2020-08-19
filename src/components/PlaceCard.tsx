@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
-import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
-import UserAvatar from './img/userAvatar.png'
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
 import Grid from '@material-ui/core/Grid'
 
@@ -26,7 +24,7 @@ const useStyles = makeStyles({
 
 interface PlaceCardProps {
   placeName: string
-  isFree: boolean
+  isAvailable: boolean
   visitorsCount: number
   userName?: string
   dateRange?: {
@@ -37,7 +35,7 @@ interface PlaceCardProps {
 
 const PlaceCard: React.FC<PlaceCardProps> = ({
   placeName,
-  isFree,
+  isAvailable,
   userName,
   dateRange,
   visitorsCount,
@@ -45,7 +43,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   const classes = useStyles()
   return (
     <Card className={classes.root}>
-      <CardMedia className={classes.media} image={UserAvatar}></CardMedia>
       <Grid container direction="column" justify="space-between">
         <CardContent>
           <Grid alignItems="center" justify="space-between" container>
@@ -55,8 +52,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
               <PeopleAltIcon style={{ verticalAlign: 'middle' }} />
             </Typography>
           </Grid>
-          {isFree ? (
-            <Typography color="textSecondary">Free</Typography>
+          {isAvailable ? (
+            <Typography color="textSecondary">Available</Typography>
           ) : (
             <>
               <Typography color="textSecondary">
@@ -66,16 +63,18 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
             </>
           )}
         </CardContent>
-        {isFree && (
-          <div>
-            <Divider />
-            <CardActions>
+        <div>
+          <Divider />
+          <CardActions>
+            {isAvailable ? (
               <Button to="/reserve-place" component={Link} color="primary">
                 Reserve
               </Button>
-            </CardActions>
-          </div>
-        )}
+            ) : (
+              <Typography>Reserved till {dateRange?.lastDay}</Typography>
+            )}
+          </CardActions>
+        </div>
       </Grid>
     </Card>
   )

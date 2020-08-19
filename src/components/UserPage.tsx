@@ -77,7 +77,15 @@ const UserPage: React.FC = () => {
                 <Typography variant="subtitle1">Visits Left:</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="subtitle1">{visitsLeft}</Typography>
+                <Typography variant="subtitle1">
+                  {visitsLeft}{' '}
+                  <IconButton
+                    style={{ padding: '0 0 0 5px' }}
+                    onClick={handleClick}
+                  >
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </Typography>
               </Grid>
             </Grid>
           </ListItem>

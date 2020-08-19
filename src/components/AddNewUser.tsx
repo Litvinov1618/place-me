@@ -18,6 +18,9 @@ const AddNewUser: React.FC = () => {
         <Grid item xs={10}>
           <TextField variant="outlined" label="Email" fullWidth />
         </Grid>
+        <Grid item xs={10}>
+          <TextField variant="outlined" label="Name" fullWidth />
+        </Grid>
         <Grid
           style={{ padding: '8px' }}
           container

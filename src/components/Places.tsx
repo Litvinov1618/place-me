@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 const testPlaces = [
   {
     placeName: 'Place 1',
-    isFree: false,
+    isAvailable: false,
     userName: 'Randy',
     dateRange: {
       firstDay: '1 Sep',
@@ -21,38 +21,38 @@ const testPlaces = [
   },
   {
     placeName: 'Place 2',
-    isFree: true,
-    userName: 'Randy',
+    isAvailable: true,
+    userName: 'John',
     dateRange: {
       firstDay: '1 Sep',
       lastDay: '5 Sep',
     },
-    visitorsCount: 5,
+    visitorsCount: 4,
   },
   {
     placeName: 'Place 3',
-    isFree: true,
-    visitorsCount: 5,
+    isAvailable: true,
+    visitorsCount: 6,
   },
   {
     placeName: 'Place 4',
-    isFree: true,
+    isAvailable: true,
     visitorsCount: 5,
   },
   {
     placeName: 'Place 5',
-    isFree: true,
-    visitorsCount: 5,
+    isAvailable: true,
+    visitorsCount: 8,
   },
   {
     placeName: 'Place 6',
-    isFree: true,
-    visitorsCount: 5,
+    isAvailable: true,
+    visitorsCount: 2,
   },
   {
     placeName: 'Place 7',
-    isFree: true,
-    visitorsCount: 5,
+    isAvailable: true,
+    visitorsCount: 6,
   },
 ]
 
@@ -80,11 +80,17 @@ const Places: React.FC = () => {
         </Grid>
         <List>
           {testPlaces.map(
-            ({ placeName, isFree, userName, visitorsCount, dateRange }) => (
+            ({
+              placeName,
+              isAvailable,
+              userName,
+              visitorsCount,
+              dateRange,
+            }) => (
               <ListItem disableGutters key={placeName}>
                 <PlaceCard
                   placeName={placeName}
-                  isFree={isFree}
+                  isAvailable={isAvailable}
                   userName={userName}
                   visitorsCount={visitorsCount}
                   dateRange={dateRange}

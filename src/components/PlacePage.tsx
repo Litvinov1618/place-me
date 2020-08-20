@@ -8,7 +8,7 @@ const rows = [
   { userName: 'John', dateRange: '7 Sep - 9 Sep', visitors: 2 },
 ]
 
-const PlaceInfo: React.FC = () => {
+const PlacePage: React.FC = () => {
   return (
     <>
       <Header headerText="Place Info" previousPage="/places" />
@@ -19,4 +19,4 @@ const PlaceInfo: React.FC = () => {
   )
 }
 
-export default PlaceInfo
+export default PlacePage

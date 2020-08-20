@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import UserAvatar from './img/userAvatar.png'
 import { makeStyles } from '@material-ui/core/styles'
-import SimpleDialogInput from './SimpleDialogInput'
+import DialogInput from './DialogInput'
 import { AddCircleOutline } from '@material-ui/icons'
 
 const useStyles = makeStyles({
@@ -113,11 +113,7 @@ const UserPage: React.FC = () => {
             </ListItem>
           )}
         </List>
-        <SimpleDialogInput
-          open={open}
-          onClose={handleClose}
-          dialogTitle="Balance"
-        />
+        <DialogInput open={open} onClose={handleClose} dialogTitle="Balance" />
       </Container>
     </>
   )

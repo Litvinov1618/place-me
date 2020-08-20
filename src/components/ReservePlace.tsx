@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import SimpleDialogSelect from './SimpleDialogSelect'
+import DialogSelect from './DialogSelect'
 import Header from './Header'
 import {
   Select,
@@ -78,7 +78,7 @@ const ReservePlace: React.FC = () => {
             Reserve
           </Button>
         </Grid>
-        <SimpleDialogSelect
+        <DialogSelect
           selectedValue={selectedValue}
           open={open}
           onClose={handleClose}

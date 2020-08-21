@@ -1,5 +1,4 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import {
   Table,
   TableBody,
@@ -10,12 +9,6 @@ import {
   Paper,
 } from '@material-ui/core'
 
-const useStyles = makeStyles({
-  root: {
-    minWidth: 360,
-  },
-})
-
 interface BookingTableProps {
   rows: {
     userName: string
@@ -25,11 +18,9 @@ interface BookingTableProps {
 }
 
 const BookingTable: React.FC<BookingTableProps> = ({ rows }) => {
-  const { root } = useStyles()
-
   return (
     <TableContainer component={Paper}>
-      <Table className={root} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Email</TableCell>

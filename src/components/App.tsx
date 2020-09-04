@@ -1,56 +1,21 @@
 import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navigation from './Navigation'
-import Places from './Places'
-import ReservePlace from './ReservePlace'
-import Members from './Members'
-import AddNewUser from './AddNewUser'
-import PlacePage from './PlacePage'
-import UserPage from './UserPage'
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import { Container } from '@material-ui/core'
-
-const useStyles = makeStyles({
-  root: {
-    minHeight: '100vh',
-    display: 'grid',
-    gridTemplate: '1fr 56px/100%',
-  },
-})
+import "normalize.css"
+import "@blueprintjs/core/lib/css/blueprint.css"
+import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+import CreatePlace from './CreatePlace'
 
 const App: React.FC = () => {
-  const { root } = useStyles()
   return (
-    <Container disableGutters={true} maxWidth="xs" className={root}>
-      <Router>
-        <div>
-          <Switch>
-            <Route exact path="/">
-              RegisterPage
-            </Route>
-            <Route path="/places">
-              <Places />
-            </Route>
-            <Route path="/members">
-              <Members />
-            </Route>
-            <Route path="/new-user">
-              <AddNewUser />
-            </Route>
-            <Route path="/user-page">
-              <UserPage />
-            </Route>
-            <Route path="/reserve-place">
-              <ReservePlace />
-            </Route>
-            <Route path="/place-info">
-              <PlacePage />
-            </Route>
-          </Switch>
-        </div>
-        <Navigation />
-      </Router>
-    </Container>
+    <Router>
+      <Navigation />
+      <Switch>
+        <Route path="places/create">
+          <CreatePlace />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

@@ -1,44 +1,20 @@
-import React, { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
-import { Apps, Person } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles({
-  root: {
-    position: 'fixed',
-    top: 'auto',
-    bottom: 0,
-    width: '100%',
-    maxWidth: '444px',
-  },
-})
+import React from 'react'
+import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
+import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
+import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
+import { NavbarDivider } from '@blueprintjs/core/lib/esm/components/navbar/navbarDivider'
+import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
+import { Link } from 'react-router-dom';
 
 const Navigation: React.FC = () => {
-  const [value, setValue] = useState(null)
-  const { root } = useStyles()
   return (
-    <BottomNavigation
-      showLabels
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue)
-      }}
-      className={root}
-    >
-      <BottomNavigationAction
-        component={RouterLink}
-        to="/places"
-        label="Places"
-        icon={<Apps />}
-      />
-      <BottomNavigationAction
-        component={RouterLink}
-        to="/members"
-        label="Members"
-        icon={<Person />}
-      />
-    </BottomNavigation>
+    <Navbar fixedToTop>
+      <NavbarGroup>
+        <NavbarHeading><Link to="/">Place-me</Link></NavbarHeading>
+        <NavbarDivider />
+        <Button><Link to="places/create">Create Place</Link></Button>
+      </NavbarGroup>
+    </Navbar>
   )
 }
 

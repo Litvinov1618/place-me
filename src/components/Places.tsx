@@ -6,34 +6,39 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Link } from 'react-router-dom'
 import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
+import IFirestoreData from './interfaces/firestoreData'
 
-const Places: React.FC = () => {
+interface PlacesProps {
+  places: IFirestoreData[],
+  deletePlace: (placeName: string) => void
+}
+
+const Places: React.FC<PlacesProps> = ({places, deletePlace}) => {
   return (
     <div>
       <Navbar>
         <NavbarGroup>
           <NavbarHeading>Places</NavbarHeading>
-          <Link to='/places/add'>
-            <Button minimal icon='add' />
+          <Link to="/places/add">
+            <Button minimal icon="add" />
           </Link>
         </NavbarGroup>
       </Navbar>
-      <Card>
-        <h3>Place 1 </h3>
-        <p><Icon icon="people" /> 5</p>
-        <Link to='/places/place1/settings'>
-          <Button>Edit</Button>
-        </Link>
-        <Button intent='danger'>Delete</Button>
-      </Card>
-      <Card>
-        <h3>Place 2</h3>
-        <p><Icon icon="people" /> 2</p>
-        <Link to='/places/place1/settings'>
-          <Button>Edit</Button>
-        </Link>
-        <Button intent='danger'>Delete</Button>
-      </Card>
+      {places
+        .filter((place: IFirestoreData) => !place.archived)
+        .map((place: IFirestoreData) => 
+          <Card key={place.name}>
+            <h3>{place.name}</h3>
+            <p>
+              <Icon icon="people" /> {place.seats}
+            </p>
+            <Link to="/places/place1/edit">
+              <Button>Edit</Button>
+            </Link>
+            <Button onClick={() => deletePlace(place.name)} intent="danger">Delete</Button>
+          </Card>
+        )
+      }
     </div>
   )
 }

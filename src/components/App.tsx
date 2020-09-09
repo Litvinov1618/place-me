@@ -7,21 +7,24 @@ import Places from './Places'
 import AddPlace from './AddPlace'
 import PlaceDetails from './PlaceDetails'
 import EditPlace from './EditPlace'
+import useCollectionPlaces from './Firebase/useCollectionPlaces'
 
 const App: React.FC = () => {
+  const { places, addPlace, deletePlace } = useCollectionPlaces()
+
   return (
     <Router>
       <Switch>
         <Route exact path="/places">
-          <Places />
+          <Places places={places} deletePlace={deletePlace} />
         </Route>
         <Route exact path="/places/add">
-          <AddPlace />
+          <AddPlace addPlace={addPlace} />
         </Route>
         <Route exact path="/places/:id">
           <PlaceDetails />
         </Route>
-        <Route exact path="/places/place1/settings">
+        <Route exact path="/places/place1/edit">
           <EditPlace />
         </Route>
       </Switch>

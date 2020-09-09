@@ -10,13 +10,13 @@ const EditPlace = () => {
           <Link to='/places'>
             <Button minimal icon='undo' />
           </Link>
-          <NavbarHeading>Place 1 Settings</NavbarHeading>
+          <NavbarHeading>Place 1 Edit</NavbarHeading>
         </NavbarGroup>
       </Navbar>
       <h3 style={{color: 'red'}}>Validation Error</h3>
       <InputGroup placeholder='Place name' />
       <InputGroup placeholder='Seats' />
-      <Button>Save Settings</Button>
+      <Button>Save</Button>
     </div>
   )
 }

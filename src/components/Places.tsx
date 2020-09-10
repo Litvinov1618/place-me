@@ -10,7 +10,7 @@ import IFirestoreData from './interfaces/firestoreData'
 
 interface PlacesProps {
   places: IFirestoreData[],
-  deletePlace: (placeName: string) => void
+  deletePlace: (placeId: number) => void
 }
 
 const Places: React.FC<PlacesProps> = ({places, deletePlace}) => {
@@ -27,15 +27,15 @@ const Places: React.FC<PlacesProps> = ({places, deletePlace}) => {
       {places
         .filter((place: IFirestoreData) => !place.archived)
         .map((place: IFirestoreData) => 
-          <Card key={place.name}>
+          <Card key={place.id}>
             <h3>{place.name}</h3>
             <p>
               <Icon icon="people" /> {place.seats}
             </p>
-            <Link to="/places/place1/edit">
+            <Link to={`places/${place.id}/edit`}>
               <Button>Edit</Button>
             </Link>
-            <Button onClick={() => deletePlace(place.name)} intent="danger">Delete</Button>
+            <Button onClick={() => deletePlace(place.id)} intent="danger">Delete</Button>
           </Card>
         )
       }

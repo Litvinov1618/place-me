@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Navbar, NavbarGroup, Button, NavbarHeading, InputGroup } from '@blueprintjs/core'
 import { Link } from 'react-router-dom'
+import usePlacesCollection from './Firebase/useCollectionPlaces'
 
-interface EditPlaceProps {
-  editPlace: (placeId: number, newPlaceName: string, newPlaceSeats: number) => void
-}
+const EditPlace: React.FC = () => {
+  const placeId = window.location.href.slice(-25, -5)
 
-const EditPlace: React.FC<EditPlaceProps> = ({editPlace}) => {
-  const placeId = +window.location.href.slice(-9, -5)
-
+  const { editPlace } = usePlacesCollection(false)
   const [placeName, setPlaceName] = useState<string>('')
   const [placeSeats, setPlaceSeats] = useState<string>('')
 

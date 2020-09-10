@@ -6,22 +6,19 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import Places from './Places'
 import AddPlace from './AddPlace'
 import EditPlace from './EditPlace'
-import useCollectionPlaces from './Firebase/useCollectionPlaces'
 
 const App: React.FC = () => {
-  const { places, addPlace, deletePlace, editPlace } = useCollectionPlaces()
-
   return (
     <Router>
       <Switch>
         <Route exact path="/places">
-          <Places places={places} deletePlace={deletePlace} />
+          <Places />
         </Route>
         <Route exact path="/places/add">
-          <AddPlace addPlace={addPlace} />
+          <AddPlace />
         </Route>
         <Route exact path="/places/:id/edit">
-          <EditPlace editPlace={editPlace} />
+          <EditPlace />
         </Route>
       </Switch>
     </Router>

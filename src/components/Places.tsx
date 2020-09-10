@@ -6,16 +6,13 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Link } from 'react-router-dom'
 import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
-import IFirestoreData from './interfaces/firestoreData'
+import useCollectionPlaces from './Firebase/useCollectionPlaces'
 
-interface PlacesProps {
-  places: IFirestoreData[],
-  deletePlace: (placeId: number) => void
-}
+const Places: React.FC = () => {
+  const { places, deletePlace } = useCollectionPlaces()
 
-const Places: React.FC<PlacesProps> = ({places, deletePlace}) => {
   return (
-    <div>
+    <>
       <Navbar>
         <NavbarGroup>
           <NavbarHeading>Places</NavbarHeading>
@@ -24,22 +21,24 @@ const Places: React.FC<PlacesProps> = ({places, deletePlace}) => {
           </Link>
         </NavbarGroup>
       </Navbar>
-      {places
-        .filter((place: IFirestoreData) => !place.archived)
-        .map((place: IFirestoreData) => 
+      {places.map((place: any) => 
           <Card key={place.id}>
-            <h3>{place.name}</h3>
+            <h3>{place.data().name}</h3>
             <p>
-              <Icon icon="people" /> {place.seats}
+              <Icon icon="people" /> {place.data().seats}
             </p>
             <Link to={`places/${place.id}/edit`}>
               <Button>Edit</Button>
             </Link>
-            <Button onClick={() => deletePlace(place.id)} intent="danger">Delete</Button>
+            <Button
+              onClick={() => deletePlace(place.id, place.data())}
+              intent="danger">
+                Delete
+            </Button>
           </Card>
         )
       }
-    </div>
+    </>
   )
 }
 

@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InputGroup, Navbar, NavbarGroup, NavbarHeading, Button } from '@blueprintjs/core'
+import usePlacesCollection from './Firebase/useCollectionPlaces'
 
-interface AddPlaceProps {
-  addPlace: (placeName: string, placeSeats: number) => void
-}
-
-const AddPlace: React.FC<AddPlaceProps> = ({addPlace}) => {
+const AddPlace: React.FC = () => {
   const [placeName, setPlaceName] = useState<string>('')
   const [placeSeats, setPlaceSeats] = useState<string>('')
+  const { addPlace } = usePlacesCollection(false)
 
   const handlePlaceNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceName(event.target.value)
@@ -25,7 +23,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({addPlace}) => {
   }
 
   return (
-    <div>
+    <>
       <Navbar>
         <NavbarGroup>
           <Link to='/places'>
@@ -38,7 +36,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({addPlace}) => {
       <InputGroup onChange={handlePlaceNameChange} value={placeName} placeholder="Place name"></InputGroup>
       <InputGroup onChange={handlePlaceSeatsChange} value={placeSeats} placeholder="Seats"></InputGroup>
       <Button onClick={() => createNewPlace()}>Add</Button>
-    </div>
+    </>
   )
 }
 

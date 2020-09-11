@@ -9,7 +9,7 @@ import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
 import useCollectionPlaces from './Firebase/useCollectionPlaces'
 
 const Places: React.FC = () => {
-  const { places, deletePlace } = useCollectionPlaces()
+  const { places, remove } = useCollectionPlaces()
 
   return (
     <>
@@ -31,7 +31,7 @@ const Places: React.FC = () => {
               <Button>Edit</Button>
             </Link>
             <Button
-              onClick={() => deletePlace(place.id, place.data())}
+              onClick={() => remove(place.id)}
               intent="danger">
                 Delete
             </Button>

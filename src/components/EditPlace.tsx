@@ -6,7 +6,7 @@ import usePlacesCollection from './Firebase/useCollectionPlaces'
 const EditPlace: React.FC = () => {
   const placeId = window.location.href.slice(-25, -5)
 
-  const { editPlace } = usePlacesCollection(false)
+  const { edit } = usePlacesCollection(false)
   const [placeName, setPlaceName] = useState<string>('')
   const [placeSeats, setPlaceSeats] = useState<string>('')
 
@@ -18,10 +18,8 @@ const EditPlace: React.FC = () => {
     setPlaceSeats(event.target.value)
   }
 
-  const createNewPlace = () => {
-    editPlace(placeId, placeName, +placeSeats)
-    setPlaceName('')
-    setPlaceSeats('')
+  const editPlace = () => {
+    edit(placeId, placeName, +placeSeats)
   }
 
   return (
@@ -31,13 +29,13 @@ const EditPlace: React.FC = () => {
           <Link to='/places'>
             <Button minimal icon='undo' />
           </Link>
-          <NavbarHeading>Place 1 Edit</NavbarHeading>
+          <NavbarHeading>Edit Place</NavbarHeading>
         </NavbarGroup>
       </Navbar>
       <h3 style={{color: 'red'}}>Validation Error</h3>
       <InputGroup onChange={handlePlaceNameChange} value={placeName} placeholder='Place name' />
       <InputGroup onChange={handlePlaceSeatsChange} value={placeSeats} placeholder='Seats' />
-      <Button onClick={() => createNewPlace()}>Save</Button>
+      <Button onClick={editPlace}>Save</Button>
     </div>
   )
 }

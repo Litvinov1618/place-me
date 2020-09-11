@@ -4,22 +4,22 @@ import { InputGroup, Navbar, NavbarGroup, NavbarHeading, Button } from '@bluepri
 import usePlacesCollection from './Firebase/useCollectionPlaces'
 
 const AddPlace: React.FC = () => {
-  const [placeName, setPlaceName] = useState<string>('')
-  const [placeSeats, setPlaceSeats] = useState<string>('')
-  const { addPlace } = usePlacesCollection(false)
+  const [name, setName] = useState<string>('')
+  const [seats, setSeats] = useState<string>('')
+  const { add } = usePlacesCollection(false)
 
-  const handlePlaceNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceName(event.target.value)
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value)
   }
 
-  const handlePlaceSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceSeats(event.target.value)
+  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSeats(event.target.value)
   }
 
   const createNewPlace = () => {
-    addPlace(placeName, +placeSeats)
-    setPlaceName('')
-    setPlaceSeats('')
+    add({name, seats: +seats})
+    setName('')
+    setSeats('')
   }
 
   return (
@@ -33,8 +33,8 @@ const AddPlace: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <h3 style={{color: 'red'}}>Validation Error</h3>
-      <InputGroup onChange={handlePlaceNameChange} value={placeName} placeholder="Place name"></InputGroup>
-      <InputGroup onChange={handlePlaceSeatsChange} value={placeSeats} placeholder="Seats"></InputGroup>
+      <InputGroup onChange={handleNameChange} value={name} placeholder="Place name"></InputGroup>
+      <InputGroup onChange={handleSeatsChange} value={seats} placeholder="Seats"></InputGroup>
       <Button onClick={() => createNewPlace()}>Add</Button>
     </>
   )

@@ -7,19 +7,19 @@ const EditPlace: React.FC = () => {
   const placeId = window.location.href.slice(-25, -5)
 
   const { edit } = usePlacesCollection(false)
-  const [placeName, setPlaceName] = useState<string>('')
-  const [placeSeats, setPlaceSeats] = useState<string>('')
+  const [name, setName] = useState<string>('')
+  const [seats, setSeats] = useState<string>('')
 
   const handlePlaceNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceName(event.target.value)
+    setName(event.target.value)
   }
 
   const handlePlaceSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceSeats(event.target.value)
+    setSeats(event.target.value)
   }
 
   const editPlace = () => {
-    edit(placeId, placeName, +placeSeats)
+    edit(placeId, { name, seats: +seats })
   }
 
   return (
@@ -33,8 +33,8 @@ const EditPlace: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <h3 style={{color: 'red'}}>Validation Error</h3>
-      <InputGroup onChange={handlePlaceNameChange} value={placeName} placeholder='Place name' />
-      <InputGroup onChange={handlePlaceSeatsChange} value={placeSeats} placeholder='Seats' />
+      <InputGroup onChange={handlePlaceNameChange} value={name} placeholder='Place name' />
+      <InputGroup onChange={handlePlaceSeatsChange} value={seats} placeholder='Seats' />
       <Button onClick={editPlace}>Save</Button>
     </div>
   )

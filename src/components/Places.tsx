@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
 import useCollectionPlaces from './Firebase/useCollectionPlaces'
+import { IPlaceCollection } from '../interfaces'
 
 const Places: React.FC = () => {
   const { places, remove } = useCollectionPlaces()
@@ -21,7 +22,7 @@ const Places: React.FC = () => {
           </Link>
         </NavbarGroup>
       </Navbar>
-      {places.map((place: any) => 
+      {places.map((place: IPlaceCollection) => 
           <Card key={place.id}>
             <h3>{place.data().name}</h3>
             <p>

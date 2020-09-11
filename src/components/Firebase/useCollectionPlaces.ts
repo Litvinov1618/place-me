@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import firebase from './firebase'
+import { IPlaceCollection, PlaceData, EditPlaceData, AddPlaceData } from '../../interfaces'
 
 const useCollectionPlaces = (withData = true) => {
-  const [collection] = useState(() => firebase.firestore().collection('places'))
-  const [places, setPlaces] = useState<any[]>([])
+  const [collection] = useState(() => firebase.firestore().collection('places') as firebase.firestore.CollectionReference<PlaceData>)
+  const [places, setPlaces] = useState<IPlaceCollection[]>([])
 
   useEffect(() => {
     if (withData)
@@ -22,17 +23,17 @@ const useCollectionPlaces = (withData = true) => {
       .catch(error => console.log(error))
   }
 
-  const add = ({name, seats}: {name: string, seats: number}) => {
+  const add = ({ name, seats }: AddPlaceData) => {
     return collection
-      .add({name, seats, archived: false})
+      .add({ name, seats, archived: false})
       .then(() => console.log('Added new place'))
       .catch((error) => console.log(error))
   }
 
-  const edit = (placeId: string, newPlaceName: string, newPlaceSeats: number) => {
+  const edit = (placeId: string, { name, seats }: EditPlaceData) => {
     return collection
       .doc(placeId)
-      .update({name: newPlaceName, seats: newPlaceSeats, archived: false})
+      .update({ name, seats: seats, archived: false })
       .then(() => console.log(`Place ${placeId} updated`))
       .catch((error) => console.log(error))
   }

@@ -17,7 +17,7 @@ const AddPlace: React.FC = () => {
   }
 
   const createNewPlace = () => {
-    add({name, seats: +seats})
+    add({ name, seats: +seats })
     setName('')
     setSeats('')
   }

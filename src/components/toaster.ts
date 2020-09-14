@@ -1,6 +1,5 @@
-import { Position, Toaster } from "@blueprintjs/core";
- 
-/** Singleton toaster instance. Create separate instances for different options. */
+import { Position, Toaster } from '@blueprintjs/core'
+
 export const AppToaster = Toaster.create({
   position: Position.TOP,
 })

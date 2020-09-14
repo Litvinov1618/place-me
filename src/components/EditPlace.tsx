@@ -1,7 +1,6 @@
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import useCurrentPlaceInfo from './Firebase/useCurrentPlaceInfo'
 import usePlacesCollection from './Firebase/usePlacesCollection'
 import { AppToaster } from './toaster'
@@ -11,24 +10,24 @@ interface EditPlaceProps {
   placeId: string
 }
 
-const EditPlace: React.FC<EditPlaceProps> = ({handleClose, placeId}) => {
-  const { placeData } = useCurrentPlaceInfo(placeId)
-  const { edit } = usePlacesCollection(false)
+const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
   const [name, setName] = useState<string>('')
   const [seats, setSeats] = useState<string>('')
+  const { placeData } = useCurrentPlaceInfo(placeId)
+  const { edit } = usePlacesCollection(false)
 
   useEffect(() => {
     if(placeData) {
       setName(placeData.name)
-      setSeats(placeData.seats + '')
+      setSeats(String(placeData.seats))
     }
   }, [placeData])
 
-  const handlePlaceNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value)
   }
 
-  const handlePlaceSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSeats(event.target.value)
   }
 
@@ -44,11 +43,9 @@ const EditPlace: React.FC<EditPlaceProps> = ({handleClose, placeId}) => {
   return (
     <>
       <h3 style={{ color: 'red' }}>Validation Error</h3>
-      <InputGroup onChange={handlePlaceNameChange} value={name} placeholder='Place name'></InputGroup>
-      <InputGroup onChange={handlePlaceSeatsChange} value={seats} placeholder='Seats' />
-      <Link to='/places' onClick={editPlace}>
-        <Button>Save</Button>
-      </Link>
+      <InputGroup onChange={handleNameChange} value={name} placeholder='Place name'></InputGroup>
+      <InputGroup onChange={handleSeatsChange} value={seats} placeholder='Seats' />
+      <Button onClick={editPlace}>Save</Button>
     </>
   )
 }

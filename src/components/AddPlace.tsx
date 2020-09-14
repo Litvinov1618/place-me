@@ -32,9 +32,9 @@ const AddPlace: React.FC<AddPlaceProps> = ({ handleClose }) => {
 
   return (
     <>
-      <h3 style={{color: 'red'}}>Validation Error</h3>
-      <InputGroup onChange={handleNameChange} value={name} placeholder="Place name"></InputGroup>
-      <InputGroup onChange={handleSeatsChange} value={seats} placeholder="Seats"></InputGroup>
+      <h3 style={{ color: 'red' }}>Validation Error</h3>
+      <InputGroup onChange={handleNameChange} value={name} placeholder='Place name'></InputGroup>
+      <InputGroup onChange={handleSeatsChange} value={seats} placeholder='Seats'></InputGroup>
       <Button onClick={createNewPlace}>Add</Button>
     </>
   )

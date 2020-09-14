@@ -1,4 +1,4 @@
-import { QueryDocumentSnapshot } from "@firebase/firestore-types"
+import { QueryDocumentSnapshot } from '@firebase/firestore-types'
 
 export interface PlaceData {
   name: string

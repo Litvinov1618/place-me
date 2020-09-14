@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InputGroup, Navbar, NavbarGroup, NavbarHeading, Button } from '@blueprintjs/core'
-import usePlacesCollection from './Firebase/useCollectionPlaces'
+import usePlacesCollection from './Firebase/usePlacesCollection'
 
 const AddPlace: React.FC = () => {
   const [name, setName] = useState<string>('')
@@ -18,8 +18,6 @@ const AddPlace: React.FC = () => {
 
   const createNewPlace = () => {
     add({ name, seats: +seats })
-    setName('')
-    setSeats('')
   }
 
   return (
@@ -35,7 +33,9 @@ const AddPlace: React.FC = () => {
       <h3 style={{color: 'red'}}>Validation Error</h3>
       <InputGroup onChange={handleNameChange} value={name} placeholder="Place name"></InputGroup>
       <InputGroup onChange={handleSeatsChange} value={seats} placeholder="Seats"></InputGroup>
-      <Button onClick={() => createNewPlace()}>Add</Button>
+      <Link to='/places' onClick={() => createNewPlace()}>
+        <Button>Add</Button>
+      </Link>
     </>
   )
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import firebase from './firebase'
 import { IPlaceCollection, PlaceData, EditPlaceData, AddPlaceData } from '../../interfaces'
 
-const useCollectionPlaces = (withData = true) => {
+const usePlacesCollection = (withData = true) => {
   const [collection] = useState(() => firebase.firestore().collection('places') as firebase.firestore.CollectionReference<PlaceData>)
   const [places, setPlaces] = useState<IPlaceCollection[]>([])
 
@@ -41,4 +41,4 @@ const useCollectionPlaces = (withData = true) => {
   return { places, remove, add, edit }
 }
 
-export default useCollectionPlaces
+export default usePlacesCollection

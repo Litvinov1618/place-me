@@ -6,11 +6,11 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Link } from 'react-router-dom'
 import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
-import useCollectionPlaces from './Firebase/useCollectionPlaces'
+import usePlacesCollection from './Firebase/usePlacesCollection'
 import { IPlaceCollection } from '../interfaces'
 
 const Places: React.FC = () => {
-  const { places, remove } = useCollectionPlaces()
+  const { places, remove } = usePlacesCollection()
 
   return (
     <>

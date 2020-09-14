@@ -19,14 +19,14 @@ const usePlacesCollection = (withData = true) => {
     return collection
       .doc(placeId)
       .update({ archived: true })
-      .then(() => console.log('Place archived'))
+      .then(() => console.log('Place archived.'))
       .catch(error => console.log(error))
   }
 
   const add = ({ name, seats }: AddPlaceData) => {
     return collection
       .add({ name, seats, archived: false})
-      .then(() => console.log('Added new place'))
+      .then(() => console.log('New place added.'))
       .catch((error) => console.log(error))
   }
 
@@ -34,7 +34,7 @@ const usePlacesCollection = (withData = true) => {
     return collection
       .doc(placeId)
       .update({ name, seats: seats, archived: false })
-      .then(() => console.log(`Place ${placeId} updated`))
+      .then(() => console.log(`Place ${placeId} edited.`))
       .catch((error) => console.log(error))
   }
 

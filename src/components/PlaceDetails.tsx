@@ -1,5 +1,8 @@
+import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
+import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
+import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
+import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import React from 'react'
-import { Navbar, NavbarGroup, Button, NavbarHeading } from '@blueprintjs/core'
 import { Link } from 'react-router-dom'
 
 const PlaceDetails = () => {

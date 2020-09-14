@@ -4,8 +4,6 @@ import "normalize.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import Places from './Places'
-import AddPlace from './AddPlace'
-import EditPlace from './EditPlace'
 
 const App: React.FC = () => {
   return (
@@ -13,12 +11,6 @@ const App: React.FC = () => {
       <Switch>
         <Route exact path="/places">
           <Places />
-        </Route>
-        <Route exact path="/places/add">
-          <AddPlace />
-        </Route>
-        <Route exact path="/places/:id/edit">
-          <EditPlace />
         </Route>
       </Switch>
     </Router>

@@ -1,13 +1,18 @@
+import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
+import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
 import React, { useState, useEffect } from 'react'
-import { Navbar, NavbarGroup, Button, NavbarHeading, InputGroup } from '@blueprintjs/core'
 import { Link } from 'react-router-dom'
-import useCurrentPlace from './Firebase/useCurrentPlace'
+import useCurrentPlaceInfo from './Firebase/useCurrentPlaceInfo'
 import usePlacesCollection from './Firebase/usePlacesCollection'
+import { AppToaster } from './toaster'
 
-const EditPlace: React.FC = () => {
-  const placeId = window.location.href.slice(-25, -5)
+interface EditPlaceProps {
+  handleClose: () => void
+  placeId: string
+}
 
-  const { placeData } = useCurrentPlace(placeId)
+const EditPlace: React.FC<EditPlaceProps> = ({handleClose, placeId}) => {
+  const { placeData } = useCurrentPlaceInfo(placeId)
   const { edit } = usePlacesCollection(false)
   const [name, setName] = useState<string>('')
   const [seats, setSeats] = useState<string>('')
@@ -29,25 +34,22 @@ const EditPlace: React.FC = () => {
 
   const editPlace = () => {
     edit(placeId, { name, seats: +seats })
+      .then(() => {
+        handleClose()
+        AppToaster.show({ message: 'Place edited.' })
+      })
+      .catch(error => console.log(error))
   }
 
   return (
-    <div>
-      <Navbar>
-        <NavbarGroup>
-          <Link to='/places'>
-            <Button minimal icon='undo' />
-          </Link>
-          <NavbarHeading>Edit Place</NavbarHeading>
-        </NavbarGroup>
-      </Navbar>
+    <>
       <h3 style={{ color: 'red' }}>Validation Error</h3>
       <InputGroup onChange={handlePlaceNameChange} value={name} placeholder='Place name'></InputGroup>
       <InputGroup onChange={handlePlaceSeatsChange} value={seats} placeholder='Seats' />
       <Link to='/places' onClick={editPlace}>
         <Button>Save</Button>
       </Link>
-    </div>
+    </>
   )
 }
 

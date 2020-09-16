@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
 import React, { useState } from 'react'
 import usePlacesCollection from '../modules/usePlacesCollection'
-import { AppToaster } from './toaster'
+import { AppToaster } from '../modules/toaster'
 
 interface AddPlaceProps {
   handleClose: () => void

@@ -24,7 +24,7 @@ const Places: React.FC = () => {
           <Button onClick={handleAddPlaceOpen} minimal icon='add' />
         </NavbarGroup>
       </Navbar>
-      {places.map((place: IPlaceCollection) => <PlaceCard placeData={place.data()} placeId={place.id} />)}
+      {places.map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)}
       <Dialog
         title='Add Place'
         canOutsideClickClose

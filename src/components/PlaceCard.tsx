@@ -6,7 +6,7 @@ import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
 import { AddPlaceData } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import EditPlace from './EditPlace'
-import { AppToaster } from './toaster'
+import { AppToaster } from '../modules/toaster'
 import usePlacesCollection from '../modules/usePlacesCollection'
 
 interface PlaceCardProps {

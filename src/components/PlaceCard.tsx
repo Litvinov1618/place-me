@@ -7,7 +7,7 @@ import { AddPlaceData } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import EditPlace from './EditPlace'
 import { AppToaster } from './toaster'
-import usePlacesCollection from './Firebase/usePlacesCollection'
+import usePlacesCollection from '../modules/usePlacesCollection'
 
 interface PlaceCardProps {
   placeId: string

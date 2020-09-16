@@ -5,7 +5,7 @@ import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navba
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { IPlaceCollection } from '../interfaces'
 import { Dialog } from '@blueprintjs/core'
-import usePlacesCollection from './Firebase/usePlacesCollection'
+import usePlacesCollection from '../modules/usePlacesCollection'
 import AddPlace from './AddPlace'
 import PlaceCard from './PlaceCard'
 

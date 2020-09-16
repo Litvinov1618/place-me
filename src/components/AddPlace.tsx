@@ -1,7 +1,7 @@
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
 import React, { useState } from 'react'
-import usePlacesCollection from './Firebase/usePlacesCollection'
+import usePlacesCollection from '../modules/usePlacesCollection'
 import { AppToaster } from './toaster'
 
 interface AddPlaceProps {

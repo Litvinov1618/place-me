@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { AddPlaceData as CurrentPlaceData } from '../../interfaces'
-import firebase from './firebase'
+import { AddPlaceData as CurrentPlaceData } from '../interfaces'
+import firestoreCollection from './firestoreCollection'
 
 const useCurrentPlaceInfo = (placeId: string) => {
-  const [collection] = useState(() => firebase.firestore().collection('places') as firebase.firestore.CollectionReference<CurrentPlaceData>)
+  const [collection] = useState(() => firestoreCollection<CurrentPlaceData>('places'))
   const [placeData, setPlaceData] = useState<CurrentPlaceData>()
 
   useEffect(() => {

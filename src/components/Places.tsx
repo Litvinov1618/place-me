@@ -4,7 +4,7 @@ import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarG
 import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { IPlaceCollection } from '../interfaces'
-import { Dialog } from '@blueprintjs/core'
+import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import AddPlace from './AddPlace'
 import PlaceCard from './PlaceCard'

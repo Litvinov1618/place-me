@@ -5,9 +5,10 @@ import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
 import { AddPlaceData } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import EditPlace from './EditPlace'
 import { AppToaster } from '../modules/toaster'
+import EditPlace from './EditPlace'
 import usePlacesCollection from '../modules/usePlacesCollection'
+import BookingPlace from './BookingPlace'
 
 interface PlaceCardProps {
   placeId: string
@@ -21,9 +22,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
   const handleEditPlaceClose = () => setIsEditPlaceOpen(false)
   const handleEditPlaceOpen = () => setIsEditPlaceOpen(true)
   
+  const [isBookingPlaceOpen, setIsBookingPlaceOpen] = useState(false)
+  const handleBookingPlaceOpen = () => setIsBookingPlaceOpen(true)
+  const handleBookingPlaceClose = () => setIsBookingPlaceOpen(false)
+
   const [isDeletionAlertOpen, setIsDeletionAlertOpen] = useState(false)
   const handleDeletionAlertOpen = () => setIsDeletionAlertOpen(true)
-  const handleDeletionAlertClose = () => setIsDeletionAlertOpen(false)
+  const handleDeletionAlertClose = () => setIsDeletionAlertOpen(false)  
 
   const removePlace = () => {
     remove(placeId)
@@ -37,6 +42,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         <p>
           <Icon icon='people' /> {placeData.seats}
         </p>
+        <Button onClick={handleBookingPlaceOpen}>Reserve</Button>
         <Button onClick={handleEditPlaceOpen}>Edit</Button>
         <Button onClick={handleDeletionAlertOpen} intent='danger'>Delete</Button>
       </Card>
@@ -48,6 +54,15 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         onClose={handleEditPlaceClose}
       >
         <EditPlace placeId={placeId} handleClose={handleEditPlaceClose} />
+      </Dialog>
+      <Dialog
+        title='Booking Place'
+        canOutsideClickClose
+        isCloseButtonShown
+        isOpen={isBookingPlaceOpen}
+        onClose={handleBookingPlaceClose}
+      >
+        <BookingPlace placeId={placeId} handleClose={handleBookingPlaceClose} />
       </Dialog>
       <Alert
         isOpen={isDeletionAlertOpen}

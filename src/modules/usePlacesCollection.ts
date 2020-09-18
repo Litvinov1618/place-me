@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { IPlaceCollection, PlaceData, EditPlaceData, AddPlaceData } from '../interfaces'
-import firestoreCollection from './firestoreCollection';
+import firestoreCollection from './firestoreCollection'
 
 const usePlacesCollection = (withData = true) => {
   const [collection] = useState(() => firestoreCollection<PlaceData>('places'))
@@ -33,7 +33,7 @@ const usePlacesCollection = (withData = true) => {
   const edit = (placeId: string, { name, seats }: EditPlaceData) => {
     return collection
       .doc(placeId)
-      .update({ name, seats: seats, archived: false })
+      .update({ name, seats: seats })
       .then(() => console.log(`Place ${placeId} edited.`))
       .catch((error) => console.log(error))
   }

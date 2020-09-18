@@ -42,7 +42,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         <p>
           <Icon icon='people' /> {placeData.seats}
         </p>
-        <Button onClick={handleBookingPlaceOpen}>Reserve</Button>
+        <Button onClick={handleBookingPlaceOpen}>Book</Button>
         <Button onClick={handleEditPlaceOpen}>Edit</Button>
         <Button onClick={handleDeletionAlertOpen} intent='danger'>Delete</Button>
       </Card>

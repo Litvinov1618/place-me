@@ -22,7 +22,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ handleClose }) => {
   }
 
   const createNewPlace = () => {
-    add({ name, seats: +seats })
+    add({ name, seats })
       .then(() => {
         handleClose()
         AppToaster.show({ message: 'Created new place.' })

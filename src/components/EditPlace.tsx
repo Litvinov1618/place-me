@@ -32,7 +32,7 @@ const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
   }
 
   const editPlace = () => {
-    edit(placeId, { name, seats: +seats })
+    edit(placeId, { name, seats })
       .then(() => {
         handleClose()
         AppToaster.show({ message: 'Place edited.' })

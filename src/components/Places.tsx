@@ -12,6 +12,7 @@ import DatePicker from './DatePicker'
 import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numericInput'
 import formatDate from '../modules/formatDate'
+import filterPlaces from '../modules/filterPlaces'
 
 const Places: React.FC = () => {
   const { places } = usePlacesCollection()
@@ -19,12 +20,19 @@ const Places: React.FC = () => {
   const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false)
   const handleAddPlaceOpen = () => setIsAddPlaceOpen(true)
   const handleAddPlaceClose = () => setIsAddPlaceOpen(false)
+  
+  const [firstDay, setFirstDay] = useState<Date>()
+  const [lastDay, setLastDay] = useState<Date>()
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
+  const handleDatePickerOpen = () => setIsDatePickerOpen(true)
+  const handleDatePickerClose = () => setIsDatePickerOpen(false)
+  const handleDatePickerChange = (date: DateRange) => {
+    date[0] && setFirstDay(date[0])
+    date[1] && setLastDay(date[1])
+  }
 
-  const [dateRange, setDateRange] = useState<DateRange>([null, null])
-  const [isDateRangePickerOpen, setIsDateRangePickerOpen] = useState(false)
-  const handleDateRangePickerOpen = () => setIsDateRangePickerOpen(true)
-  const handleDateRangePickerClose = () => setIsDateRangePickerOpen(false)
-  const handleDateRangeChange = (date: DateRange) => setDateRange(date)
+  const [seats, setSeats] = useState('1')
+  const handleSeatsChange = (v: number , value: string) => setSeats(value)
 
   return (
     <div>
@@ -35,11 +43,11 @@ const Places: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <div>
-        <Button onClick={handleDateRangePickerOpen}>{dateRange[0] ? formatDate(dateRange[0]) : 'FirstDay'}</Button>
-        <Button onClick={handleDateRangePickerOpen}>{dateRange[1] ? formatDate(dateRange[1]) : 'Last Day'}</Button>
-        <div>Seats: <NumericInput defaultValue={'1'} min={1} /></div>
+        <Button onClick={handleDatePickerOpen}>{firstDay ? formatDate(firstDay) : 'FirstDay'}</Button>
+        <Button onClick={handleDatePickerOpen}>{lastDay ? formatDate(lastDay) : 'Last Day'}</Button>
+        <div>Seats: <NumericInput onValueChange={handleSeatsChange} value={seats} min={1} /></div>
       </div>
-      {places.map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)}
+      {places.filter(place => filterPlaces(place.data(), seats)).map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)}
       <Dialog
         title='Add Place'
         canOutsideClickClose
@@ -53,18 +61,18 @@ const Places: React.FC = () => {
         title='Choose Date Range'
         canOutsideClickClose
         isCloseButtonShown
-        isOpen={isDateRangePickerOpen}
-        onClose={handleDateRangePickerClose}
+        isOpen={isDatePickerOpen}
+        onClose={handleDatePickerClose}
       >
         <DatePicker
           allowSingleDayRange
           shortcuts={false}
-          onChange={handleDateRangeChange}
+          onChange={handleDatePickerChange}
           minDate={new Date()}
           maxDate={new Date(Date.now() + 3e11)}
           contiguousCalendarMonths
         />
-        <Button onClick={handleDateRangePickerClose}>Choose</Button>
+        <Button onClick={handleDatePickerClose}>Choose</Button>
       </Dialog>
     </div>
   )

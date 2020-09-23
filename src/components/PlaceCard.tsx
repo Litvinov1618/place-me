@@ -3,16 +3,16 @@ import { Alert } from '@blueprintjs/core/lib/esm/components/alert/alert'
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
 import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
-import { AddPlaceData } from '../interfaces'
+import { PlaceData } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import { AppToaster } from '../modules/toaster'
 import EditPlace from './EditPlace'
 import usePlacesCollection from '../modules/usePlacesCollection'
-import BookingPlace from './BookingPlace'
+import BookPlace from './BookPlace'
 
 interface PlaceCardProps {
   placeId: string
-  placeData: AddPlaceData
+  placeData: PlaceData
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
@@ -62,7 +62,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         isOpen={isBookingPlaceOpen}
         onClose={handleBookingPlaceClose}
       >
-        <BookingPlace placeId={placeId} handleClose={handleBookingPlaceClose} />
+        <BookPlace placeId={placeId} placeBookings={placeData.bookings} handleClose={handleBookingPlaceClose} />
       </Dialog>
       <Alert
         isOpen={isDeletionAlertOpen}

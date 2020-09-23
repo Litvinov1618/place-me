@@ -5,14 +5,16 @@ import DatePicker from './DatePicker'
 import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 import useBookingPlace from '../modules/useBookingPlace'
 import { Classes } from '@blueprintjs/core/lib/esm/common'
+import { BookingPlaceData } from '../interfaces'
 
 interface BookPlaceProps {
   placeId: string
   handleClose: () => void
+  placeBookings: BookingPlaceData[]
 }
 
-const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId }) => {
-  const { add } = useBookingPlace(placeId)
+const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId, placeBookings }) => {
+  const { book } = useBookingPlace(placeId)
 
   const [dateRange, setDateRange] = useState<DateRange>([null, null])
   const handleDateRangeChange = (dateRange: DateRange) => setDateRange(dateRange)
@@ -24,8 +26,8 @@ const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId }) => {
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => setAmount(event.target.value)
 
   const bookPlace = () => {
-    add({ dateRange, name, amount: +amount })
-      .then(() => handleClose())
+    book({ dateRange, name, amount: +amount }, placeBookings)
+      .then(handleClose)
       .catch(error => console.log(error))
   }
 

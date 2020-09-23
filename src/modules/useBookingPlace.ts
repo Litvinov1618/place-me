@@ -3,16 +3,17 @@ import firestoreCollection from './firestoreCollection'
 import { BookingPlaceData } from '../interfaces'
 
 const useBookingPlace = (placeId: string) => {
-  const [collection] = useState(() => firestoreCollection('places').doc(placeId).collection('bookings'))
+  const [collection] = useState(() => firestoreCollection('places'))
 
-  const add = (bookingPlaceData: BookingPlaceData) => {
+  const book = (bookingPlaceData: BookingPlaceData, oldBookings: BookingPlaceData[] = []) => {
     return collection
-      .add(bookingPlaceData)
+      .doc(placeId)
+      .update({ bookings: [...oldBookings, bookingPlaceData] })
       .then(() => console.log('Booking added'))
       .catch(error => console.log(error))
   }
 
-  return { add }
+  return { book }
 }
 
 export default useBookingPlace

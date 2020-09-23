@@ -13,13 +13,9 @@ const AddPlace: React.FC<AddPlaceProps> = ({ handleClose }) => {
   const [seats, setSeats] = useState<string>('')
   const { add } = usePlacesCollection(false)
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value)
 
-  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSeats(event.target.value)
-  }
+  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
 
   const createNewPlace = () => {
     add({ name, seats })
@@ -27,7 +23,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ handleClose }) => {
         handleClose()
         AppToaster.show({ message: 'Created new place.' })
       })
-      .catch(error => console.log(error))
+      .catch((error: Function) => console.log(error))
   }
 
   return (

@@ -47,7 +47,10 @@ const Places: React.FC = () => {
         <Button onClick={handleDatePickerOpen}>{lastDay ? formatDate(lastDay) : 'Last Day'}</Button>
         <div>Seats: <NumericInput onValueChange={handleSeatsChange} value={seats} min={1} /></div>
       </div>
-      {places.filter(place => filterPlaces(place.data(), seats)).map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)}
+      {places
+        .filter(place => filterPlaces(place.data(), seats))
+        .map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)
+      }
       <Dialog
         title='Add Place'
         canOutsideClickClose

@@ -5,6 +5,7 @@ export interface PlaceData {
   name: string
   seats: string
   archived: boolean
+  bookings: BookingPlaceData[]
 }
 
 export interface EditPlaceData {

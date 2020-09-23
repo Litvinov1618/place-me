@@ -25,7 +25,7 @@ const usePlacesCollection = (withData = true) => {
 
   const add = ({ name, seats }: AddPlaceData) => {
     return collection
-      .add({ name, seats, archived: false})
+      .add({ name, seats, archived: false, bookings: []})
       .then(() => console.log('New place added.'))
       .catch((error) => console.log(error))
   }
@@ -33,7 +33,7 @@ const usePlacesCollection = (withData = true) => {
   const edit = (placeId: string, { name, seats }: EditPlaceData) => {
     return collection
       .doc(placeId)
-      .update({ name, seats: seats })
+      .update({ name, seats })
       .then(() => console.log(`Place ${placeId} edited.`))
       .catch((error) => console.log(error))
   }

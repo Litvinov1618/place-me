@@ -23,13 +23,9 @@ const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
     }
   }, [placeData])
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value)
 
-  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSeats(event.target.value)
-  }
+  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
 
   const editPlace = () => {
     edit(placeId, { name, seats })

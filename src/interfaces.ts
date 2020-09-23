@@ -21,7 +21,8 @@ export interface AddPlaceData {
 export type IPlaceCollection = QueryDocumentSnapshot<PlaceData>
 
 export interface BookingPlaceData {
-  dateRange: DateRange
+  firstDay: number
+  lastDay: number
   name: string
   amount: number
 }

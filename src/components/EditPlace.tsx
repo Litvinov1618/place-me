@@ -17,7 +17,7 @@ const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
   const { edit } = usePlacesCollection(false)
 
   useEffect(() => {
-    if(placeData) {
+    if (placeData) {
       setName(placeData.name)
       setSeats(String(placeData.seats))
     }

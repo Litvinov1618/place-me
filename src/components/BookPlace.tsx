@@ -26,14 +26,24 @@ const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId, placeBookin
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => setAmount(event.target.value)
 
   const bookPlace = () => {
-    book({ dateRange, name, amount: +amount }, placeBookings)
-      .then(handleClose)
-      .catch(error => console.log(error))
+    const [firstDay, lastDay] = dateRange
+    if (firstDay && lastDay) {
+      book({ firstDay: firstDay.getTime(), lastDay: lastDay.getTime(), name, amount: +amount }, placeBookings)
+        .then(handleClose)
+        .catch(error => console.log(error))
+    }
   }
 
   return (
     <div>
-      <DatePicker className={Classes.ELEVATION_1} shortcuts={false} onChange={handleDateRangeChange} />
+      <DatePicker
+        contiguousCalendarMonths
+        minDate={new Date()}
+        maxDate={new Date(Date.now() + 3e11)}
+        className={Classes.ELEVATION_1}
+        shortcuts={false}
+        onChange={handleDateRangeChange} 
+      />
       <InputGroup placeholder='Name' value={name} onChange={handleNameChange}></InputGroup>
       <InputGroup placeholder='Amount' value={amount} onChange={handleAmountChange}></InputGroup>
       <AnchorButton text='Book' onClick={bookPlace}></AnchorButton>

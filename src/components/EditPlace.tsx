@@ -28,7 +28,7 @@ const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
   const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
 
   const editPlace = () => {
-    edit(placeId, { name, seats })
+    edit(placeId, { name, seats: +seats })
       .then(() => {
         handleClose()
         AppToaster.show({ message: 'Place edited.' })

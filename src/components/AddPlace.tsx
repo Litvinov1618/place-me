@@ -18,7 +18,7 @@ const AddPlace: React.FC<AddPlaceProps> = ({ handleClose }) => {
   const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
 
   const createNewPlace = () => {
-    add({ name, seats })
+    add({ name, seats: +seats })
       .then(() => {
         handleClose()
         AppToaster.show({ message: 'Created new place.' })

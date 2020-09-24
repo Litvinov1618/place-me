@@ -4,15 +4,16 @@ import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarG
 import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numericInput'
-import { IPlaceCollection } from '../interfaces'
+import { IPlaceSnapshot } from '../interfaces'
 import AddPlace from './AddPlace'
 import PlaceCard from './PlaceCard'
 import DatePicker from './DatePicker'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import formatDate from '../modules/formatDate'
-import filterPlaces from '../modules/filterPlaces'
+import verifyPlace from '../modules/verifyPlace'
+import { ButtonGroup } from '@blueprintjs/core'
+import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 
 const Places: React.FC = () => {
   const { places } = usePlacesCollection()
@@ -27,13 +28,11 @@ const Places: React.FC = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const handleDatePickerOpen = () => setIsDatePickerOpen(true)
   const handleDatePickerClose = () => setIsDatePickerOpen(false)
-  const handleDatePickerChange = ([firstDate, lastDate]: DateRange) => {
-    if (firstDate && lastDate) {
-      setFirstDay(firstDate)
-      setLastDay(lastDate)
-      setShowResetButton(true)
-      handleDatePickerClose()
-    }
+  const handleDatePickerChange = ([firstDay, lastDay]: DateRange) => {
+    setFirstDay(firstDay)
+    setLastDay(lastDay)
+    setShowResetButton(true)
+    handleDatePickerClose()
   }
 
   const [showResetButton, setShowResetButton] = useState(false)
@@ -43,8 +42,8 @@ const Places: React.FC = () => {
     setShowResetButton(false)
   }
 
-  const [seats, setSeats] = useState('1')
-  const handleSeatsChange = (v: number , value: string) => setSeats(value)
+  const [seats, setSeats] = useState(1)
+  const handleSeatsChange = (value: number) => setSeats(value)
 
   return (
     <div>
@@ -55,14 +54,17 @@ const Places: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <div>
-        <Button onClick={handleDatePickerOpen}>{firstDay ? formatDate(firstDay) : 'FirstDay'}</Button>
-        <Button onClick={handleDatePickerOpen}>{lastDay ? formatDate(lastDay) : 'Last Day'}</Button>
-        {showResetButton && <Button onClick={resetFilters} >Reset filters</Button>}
+        <ButtonGroup>
+          <Button style={{outline: 'none'}} onClick={handleDatePickerOpen}>
+            {firstDay ? formatDate(firstDay) : 'FirstDay'} - {lastDay ? formatDate(lastDay) : 'Last Day'}
+          </Button>
+          {showResetButton && <Button style={{outline: 'none'}} onClick={resetFilters} >Reset filters</Button>}
+        </ButtonGroup>
         <div>Seats: <NumericInput onValueChange={handleSeatsChange} value={seats} min={1} /></div>
       </div>
       {places
-        .filter(place => filterPlaces(place.data(), seats, firstDay, lastDay))
-        .map((place: IPlaceCollection) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)
+        .filter(place => verifyPlace(place.data(), +seats, firstDay, lastDay))
+        .map((place: IPlaceSnapshot) => <PlaceCard key={place.id} placeData={place.data()} placeId={place.id} />)
       }
       <Dialog
         title='Add Place'
@@ -82,6 +84,7 @@ const Places: React.FC = () => {
       >
         <DatePicker
           allowSingleDayRange
+          defaultValue={[firstDay, lastDay]}
           shortcuts={false}
           onChange={handleDatePickerChange}
           minDate={new Date()}

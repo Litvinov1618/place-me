@@ -17,11 +17,24 @@ export interface AddPlaceData {
   seats: number
 }
 
-export type IPlaceSnapshot = QueryDocumentSnapshot<PlaceData>
+export type PlaceSnapshot = QueryDocumentSnapshot<PlaceData>
 
 export interface BookingPlaceData {
   firstDay: number
   lastDay: number
   name: string
   amount: number
+}
+
+export interface Filters {
+  minSeats: number
+  dateRange?: {
+    startDate: Date
+    endDate: Date
+  }
+}
+
+export interface BookingDateRange {
+  startDate: Date
+  endDate: Date
 }

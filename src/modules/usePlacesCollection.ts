@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { IPlaceSnapshot, PlaceData, EditPlaceData, AddPlaceData } from '../interfaces'
+import { PlaceSnapshot, PlaceData, EditPlaceData, AddPlaceData } from '../interfaces'
 import firestoreCollection from './firestoreCollection'
 
 const usePlacesCollection = (withData = true) => {
   const [collection] = useState(() => firestoreCollection<PlaceData>('places'))
-  const [places, setPlaces] = useState<IPlaceSnapshot[]>([])
+  const [places, setPlaces] = useState<PlaceSnapshot[]>([])
 
   useEffect(() => {
     if (withData)

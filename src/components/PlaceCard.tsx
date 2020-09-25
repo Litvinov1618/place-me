@@ -62,7 +62,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         isOpen={isBookingPlaceOpen}
         onClose={handleBookingPlaceClose}
       >
-        <BookPlace placeId={placeId} placeBookings={placeData.bookings} handleClose={handleBookingPlaceClose} />
+        <BookPlace placeId={placeId} placeBookings={placeData.bookings} placeName={placeData.name} handleClose={handleBookingPlaceClose} />
       </Dialog>
       <Alert
         isOpen={isDeletionAlertOpen}

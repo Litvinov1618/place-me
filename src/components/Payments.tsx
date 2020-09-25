@@ -5,18 +5,19 @@ import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
 import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
 import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import dateToString from '../modules/dateToString'
-import { BookingDateRange, PaymentData } from '../interfaces'
+import { BookingDateRange, PaymentData, PaymentSnapshot } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import DatePicker from './DatePicker'
 import { ButtonGroup } from '@blueprintjs/core'
+import usePaymentsCollection from '../modules/usePaymentsCollection'
 
-const verifyPayments = (payment: PaymentData, dateRange?: {startDate: Date, endDate: Date}) => {
+const verifyPayments = (paymentData: PaymentData, dateRange?: {startDate: Date, endDate: Date}) => {
   if (dateRange) {
     const { startDate, endDate } = dateRange
 
     if (
-      startDate.getTime() <= +payment.book.bookingDate.lastDate && 
-      endDate.getTime() >= +payment.book.bookingDate.firstDate
+      startDate.getTime() <= paymentData.bookingDate.lastDay && 
+      endDate.getTime() >= paymentData.bookingDate.firstDay
     ) {
       return false
     }
@@ -25,46 +26,17 @@ const verifyPayments = (payment: PaymentData, dateRange?: {startDate: Date, endD
   return true
 }
 
-const countTotal = (payments: PaymentData[]) => {
+const countTotal = (payments: PaymentSnapshot[]) => {
   let total = 0
   for (let payment of payments) {
-    total += payment.amount
+    total += payment.data().amount
   }
 
   return total
 }
 
-const paymentsData = [
-  {
-    paymentDate: new Date('2020-09-25'),
-    name: 'Alex',
-    amount: 600,
-    book: {
-      placeName: 'P1',
-      bookingDate: {
-        firstDate: new Date('2020-09-25'),
-        lastDate: new Date('2020-09-26')
-      }
-    }
-  },
-  {
-    paymentDate: new Date('2020-09-27'),
-    name: 'Randy',
-    amount: 900,
-    book: {
-      placeName: 'P2',
-      bookingDate: {
-        firstDate: new Date('2020-09-27'),
-        lastDate: new Date('2020-09-29')
-      }
-    }
-  }
-]
-
 const Payments: React.FC = () => {
-  const [payments, setPayments] = useState<PaymentData[]>([])
-
-  setTimeout(() => setPayments(paymentsData), 1000)
+  const { payments } = usePaymentsCollection()
 
   const [dateRange, setDateRange] = useState<BookingDateRange>()
 
@@ -101,19 +73,19 @@ const Payments: React.FC = () => {
       </ButtonGroup>
       <h3 className='bp3-heading'>Total: {countTotal(payments)}</h3>
       {payments
-        .filter(payment => verifyPayments(payment, dateRange))
-        .map(({ paymentDate, amount, name, book }) => <Card>
+        .filter(payment => verifyPayments(payment.data(), dateRange))
+        .map((payment) => <Card key={payment.id}>
             <p className='bp3-ui-text'>
-              Date: {dateToString(paymentDate)}
+              Payment Date: {dateToString(new Date(payment.data().paymentDate))}
             </p>
             <p className='bp3-ui-text'>
-              Amount: {amount} ₴
+              Amount: {payment.data().amount} ₴
             </p>
             <p className='bp3-ui-text'>
-              Name: {name}
+              Name: {payment.data().visitorName}
             </p>
             <p className='bp3-ui-text'>
-              Place: '{book.placeName}', {dateToString(book.bookingDate.firstDate)} - {dateToString(book.bookingDate.lastDate)}
+              Place: {payment.data().placeName} {dateToString(new Date(payment.data().bookingDate.firstDay))} - {dateToString(new Date(payment.data().bookingDate.lastDay))}
             </p>
           </Card>
         )

@@ -22,7 +22,8 @@ export type PlaceSnapshot = QueryDocumentSnapshot<PlaceData>
 export interface BookingPlaceData {
   firstDay: number
   lastDay: number
-  name: string
+  visitorName: string
+  placeName: string
   amount: number
 }
 
@@ -40,14 +41,14 @@ export interface BookingDateRange {
 }
 
 export interface PaymentData {
-  paymentDate: Date;
-    name: string;
-    amount: number;
-    book: {
-        placeName: string;
-        bookingDate: {
-            firstDate: Date;
-            lastDate: Date;
-        };
-    };
+  paymentDate: number
+  visitorName: string
+  placeName: string
+  amount: number
+  bookingDate: {
+    firstDay: number
+    lastDay: number
+  }
 }
+
+export type PaymentSnapshot = QueryDocumentSnapshot<PaymentData>

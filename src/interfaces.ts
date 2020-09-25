@@ -38,3 +38,16 @@ export interface BookingDateRange {
   startDate: Date
   endDate: Date
 }
+
+export interface PaymentData {
+  paymentDate: Date;
+    name: string;
+    amount: number;
+    book: {
+        placeName: string;
+        bookingDate: {
+            firstDate: Date;
+            lastDate: Date;
+        };
+    };
+}

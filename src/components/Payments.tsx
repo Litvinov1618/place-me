@@ -11,30 +11,6 @@ import DatePicker from './DatePicker'
 import { ButtonGroup } from '@blueprintjs/core'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
 
-const verifyPayments = (paymentData: PaymentData, dateRange?: {startDate: Date, endDate: Date}) => {
-  if (dateRange) {
-    const { startDate, endDate } = dateRange
-
-    if (
-      startDate.getTime() <= paymentData.bookingDate.lastDay && 
-      endDate.getTime() >= paymentData.bookingDate.firstDay
-    ) {
-      return false
-    }
-  }
-
-  return true
-}
-
-const countTotal = (payments: PaymentSnapshot[]) => {
-  let total = 0
-  for (let payment of payments) {
-    total += payment.data().amount
-  }
-
-  return total
-}
-
 const Payments: React.FC = () => {
   const { payments } = usePaymentsCollection()
 
@@ -53,6 +29,32 @@ const Payments: React.FC = () => {
   const resetFilters = () => {
     setDateRange(undefined)
     setShowResetButton(false)
+  }
+
+  const countTotal = (payments: PaymentSnapshot[]) => {
+    payments = payments.filter(payment => verifyPayments(payment.data(), dateRange))
+  
+    let total = 0
+    for (let payment of payments) {
+      total += payment.data().amount
+    }
+  
+    return total
+  }
+
+  const verifyPayments = (paymentData: PaymentData, dateRange?: {startDate: Date, endDate: Date}) => {
+    if (dateRange) {
+      const { startDate, endDate } = dateRange
+  
+      if (
+        startDate.getTime() <= paymentData.bookingDate.lastDay && 
+        endDate.getTime() >= paymentData.bookingDate.firstDay
+      ) {
+        return false
+      }
+    }
+  
+    return true
   }
 
   return (

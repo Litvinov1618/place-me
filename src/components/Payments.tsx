@@ -47,8 +47,8 @@ const Payments: React.FC = () => {
       const { startDate, endDate } = dateRange
   
       if (
-        startDate.getTime() <= paymentData.bookingDate.lastDay && 
-        endDate.getTime() >= paymentData.bookingDate.firstDay
+        startDate <= paymentData.bookingDate.endDate.toDate() && 
+        endDate >= paymentData.bookingDate.startDate.toDate()
       ) {
         return false
       }
@@ -76,9 +76,10 @@ const Payments: React.FC = () => {
       <h3 className='bp3-heading'>Total: {countTotal(payments)}</h3>
       {payments
         .filter(payment => verifyPayments(payment.data(), dateRange))
-        .map((payment) => <Card key={payment.id}>
+        .map((payment) => (
+          <Card key={payment.id}>
             <p className='bp3-ui-text'>
-              Payment Date: {dateToString(new Date(payment.data().paymentDate))}
+              Payment Date: {dateToString(payment.data().paymentDate.toDate())}
             </p>
             <p className='bp3-ui-text'>
               Amount: {payment.data().amount} ₴
@@ -87,10 +88,10 @@ const Payments: React.FC = () => {
               Name: {payment.data().visitorName}
             </p>
             <p className='bp3-ui-text'>
-              Place: {payment.data().placeName} {dateToString(new Date(payment.data().bookingDate.firstDay))} - {dateToString(new Date(payment.data().bookingDate.lastDay))}
+              Place: {payment.data().placeName} {dateToString(payment.data().bookingDate.startDate.toDate())} - {dateToString(payment.data().bookingDate.endDate.toDate())}
             </p>
           </Card>
-        )
+        ))
       }
       <Dialog
         title='Choose Date Range'

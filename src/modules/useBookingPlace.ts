@@ -3,6 +3,7 @@ import firestoreCollection from './firestoreCollection'
 import { BookingPlaceData } from '../interfaces'
 import firebase from './firebase'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
+import Timestamp from '../modules/timestamp'
 
 const useBookingPlace = (placeId: string) => {
   const [collection] = useState(() => firestoreCollection('places'))
@@ -19,13 +20,13 @@ const useBookingPlace = (placeId: string) => {
           .then(() => console.log('Booking added'))
           .catch(error => console.log(error))
         await add({
-          paymentDate: new Date().getTime(),
+          paymentDate: Timestamp.now(),
           visitorName: bookingPlaceData.visitorName,
           placeName: bookingPlaceData.placeName,
           amount: bookingPlaceData.amount,
           bookingDate: {
-            firstDay: bookingPlaceData.firstDay,
-            lastDay: bookingPlaceData.lastDay
+            startDate: bookingPlaceData.startDate,
+            endDate: bookingPlaceData.endDate
           }
           })
           .then(() => console.log('Payment added'))

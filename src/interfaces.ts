@@ -1,4 +1,4 @@
-import { QueryDocumentSnapshot } from '@firebase/firestore-types'
+import { QueryDocumentSnapshot, Timestamp } from '@firebase/firestore-types'
 
 export interface PlaceData {
   name: string
@@ -20,8 +20,8 @@ export interface AddPlaceData {
 export type PlaceSnapshot = QueryDocumentSnapshot<PlaceData>
 
 export interface BookingPlaceData {
-  firstDay: number
-  lastDay: number
+  startDate: Timestamp
+  endDate: Timestamp
   visitorName: string
   placeName: string
   amount: number
@@ -41,13 +41,13 @@ export interface BookingDateRange {
 }
 
 export interface PaymentData {
-  paymentDate: number
+  paymentDate: Timestamp
   visitorName: string
   placeName: string
   amount: number
   bookingDate: {
-    firstDay: number
-    lastDay: number
+    startDate: Timestamp
+    endDate: Timestamp
   }
 }
 

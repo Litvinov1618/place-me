@@ -6,6 +6,7 @@ import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 import useBookingPlace from '../modules/useBookingPlace'
 import { Classes } from '@blueprintjs/core/lib/esm/common'
 import { BookingPlaceData } from '../interfaces'
+import Timestamp from '../modules/timestamp'
 
 interface BookPlaceProps {
   placeId: string
@@ -29,7 +30,15 @@ const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId, placeBookin
   const bookPlace = () => {
     const [firstDay, lastDay] = dateRange
     if (firstDay && lastDay) {
-      book({ firstDay: firstDay.getTime(), lastDay: lastDay.getTime(), visitorName, placeName, amount: +amount }, placeBookings)
+      book(
+        {
+          startDate: Timestamp.fromDate(firstDay),
+          endDate: Timestamp.fromDate(lastDay),
+          visitorName,
+          placeName,
+          amount: +amount,
+        }, placeBookings
+      )
         .then(handleClose)
         .catch(error => console.log(error))
     }

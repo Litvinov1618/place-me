@@ -9,6 +9,13 @@ import { AppToaster } from '../modules/toaster'
 import EditPlace from './EditPlace'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import BookPlace from './BookPlace'
+import dateToString from '../modules/dateToString'
+import styled from 'styled-components'
+
+const Bookings = styled.div`
+  padding-left: 10px;
+  color: ${(props: {isActual: Boolean}) => props.isActual ? 'black' : 'gray'};
+`
 
 interface PlaceCardProps {
   placeId: string
@@ -28,7 +35,11 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
 
   const [isDeletionAlertOpen, setIsDeletionAlertOpen] = useState(false)
   const handleDeletionAlertOpen = () => setIsDeletionAlertOpen(true)
-  const handleDeletionAlertClose = () => setIsDeletionAlertOpen(false)  
+  const handleDeletionAlertClose = () => setIsDeletionAlertOpen(false)
+
+  const [isViewPlaceOpen, setIsViewPlaceOpen] = useState(false)
+  const handleViewPlaceOpen = () => setIsViewPlaceOpen(true)
+  const handleViewPlaceClose = () => setIsViewPlaceOpen(false)
 
   const removePlace = () => {
     remove(placeId)
@@ -44,6 +55,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         </p>
         <Button onClick={handleBookingPlaceOpen}>Book</Button>
         <Button onClick={handleEditPlaceOpen}>Edit</Button>
+        <Button onClick={handleViewPlaceOpen}>View Bookings</Button>
         <Button onClick={handleDeletionAlertOpen} intent='danger'>Delete</Button>
       </Card>
       <Dialog
@@ -63,6 +75,25 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         onClose={handleBookingPlaceClose}
       >
         <BookPlace placeId={placeId} placeBookings={placeData.bookings} placeName={placeData.name} handleClose={handleBookingPlaceClose} />
+      </Dialog>
+      <Dialog
+        title='Bookings'
+        isOpen={isViewPlaceOpen}
+        onClose={handleViewPlaceClose}
+        isCloseButtonShown
+      >
+        {placeData.bookings.sort((a, b) => {
+          if (a.firstDay > b.lastDay) return -1
+          else return 1
+        }).map((book, index) => 
+          <Bookings isActual={book.lastDay < Date.now() || book.firstDay > Date.now() ? false : true}>
+            <h4>{index+= 1}</h4>
+            <p>Amount: {book.amount}</p>
+            <p>First Day: {dateToString(new Date(book.firstDay))}</p>
+            <p>Last Day: {dateToString(new Date(book.lastDay))}</p>
+            <p>Visitor Name: {book.visitorName}</p>
+          </Bookings>
+        )}
       </Dialog>
       <Alert
         isOpen={isDeletionAlertOpen}

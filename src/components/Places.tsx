@@ -11,7 +11,7 @@ import usePlacesCollection from '../modules/usePlacesCollection'
 import dateToString from '../modules/dateToString'
 import { ButtonGroup } from '@blueprintjs/core'
 import PlaceList from './PlaceList'
-import { BookingDateRange } from '../interfaces'
+import { FiniteDateRange } from '../interfaces'
 
 const Places: React.FC = () => {
   const { places } = usePlacesCollection()
@@ -20,12 +20,12 @@ const Places: React.FC = () => {
   const handleAddPlaceOpen = () => setIsAddPlaceOpen(true)
   const handleAddPlaceClose = () => setIsAddPlaceOpen(false)
 
-  const [dateRange, setDateRange] = useState<BookingDateRange>()
+  const [dateRange, setDateRange] = useState<FiniteDateRange>()
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const handleDatePickerOpen = () => setIsDatePickerOpen(true)
   const handleDatePickerClose = () => setIsDatePickerOpen(false)
-  const handleDatePickerChange = (dateRange: BookingDateRange) => {
+  const handleDatePickerChange = (dateRange: FiniteDateRange) => {
     setDateRange(dateRange)
     setShowResetButton(true)
     handleDatePickerClose()

@@ -21,23 +21,26 @@ export type PlaceSnapshot = QueryDocumentSnapshot<PlaceData>
 
 export interface BookingPlaceData {
   startDate: Timestamp
-  endDate: Timestamp
+  endDate: Timestamp | null
   visitorName: string
   placeName: string
   amount: number
+  paidDays: FiniteTimestampRange
 }
 
 export interface Filters {
   minSeats: number
-  dateRange?: {
-    startDate: Date
-    endDate: Date
-  }
+  dateRange?: FiniteDateRange
 }
 
-export interface BookingDateRange {
+export interface FiniteDateRange {
   startDate: Date
   endDate: Date
+}
+
+export interface FiniteTimestampRange {
+  startDate: Timestamp
+  endDate: Timestamp
 }
 
 export interface PaymentData {
@@ -45,9 +48,10 @@ export interface PaymentData {
   visitorName: string
   placeName: string
   amount: number
+  paidDays: FiniteTimestampRange
   bookingDate: {
     startDate: Timestamp
-    endDate: Timestamp
+    endDate: Timestamp | null
   }
 }
 

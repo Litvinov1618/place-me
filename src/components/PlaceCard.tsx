@@ -83,14 +83,14 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         isCloseButtonShown
       >
         {placeData.bookings.sort(({ startDate }, { endDate }) => {
-          if (startDate > endDate) return -1
+          if (endDate && startDate > endDate) return -1
           else return 1
         }).map((book, index) => 
-          <Bookings isActual={book.endDate.toMillis() < Date.now() || book.startDate.toMillis() > Date.now() ? false : true}>
-            <h4>{index+= 1}</h4>
+          <Bookings key={index} isActual={book.startDate.toMillis() > Date.now() ? false : true}>
+            <h4>{++index}</h4>
             <p>Amount: {book.amount}</p>
             <p>First Day: {dateToString(book.startDate.toDate())}</p>
-            <p>Last Day: {dateToString(book.endDate.toDate())}</p>
+            <p>Last Day: {book.endDate ? dateToString(book.endDate.toDate()) : 'Forever'}</p>
             <p>Visitor Name: {book.visitorName}</p>
           </Bookings>
         )}

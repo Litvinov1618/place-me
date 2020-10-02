@@ -6,7 +6,7 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numericInput'
 import AddPlace from './AddPlace'
-import DatePicker from './DatePicker'
+import DateRangePicker from './DateRangePicker'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import dateToString from '../modules/dateToString'
 import { ButtonGroup } from '@blueprintjs/core'
@@ -77,7 +77,7 @@ const Places: React.FC = () => {
         isOpen={isDatePickerOpen}
         onClose={handleDatePickerClose}
       >
-        <DatePicker
+        <DateRangePicker
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}

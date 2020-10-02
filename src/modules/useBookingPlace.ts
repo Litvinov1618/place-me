@@ -44,19 +44,22 @@ const useBookingPlace = (placeId: string) => {
           .catch(error => console.log(error))
 
         await add({
-          ...bookingPlaceData,
-          paymentDate: Timestamp.now(),
-          bookingDate: {
-            startDate: bookingPlaceData.startDate,
-            endDate: bookingPlaceData.endDate 
-          }
-        })
+            ...bookingPlaceData,
+            paymentDate: Timestamp.now(),
+            bookingDate: {
+              startDate: bookingPlaceData.startDate,
+              endDate: bookingPlaceData.endDate 
+            }
+          })
           .then(() => console.log('Payment added'))
           .catch(error => console.log(error))
 
       })
       .then(() => console.log('Transaction completed'))
-      .catch(error => console.log('Transaction failed with error: ', error))
+      .catch(error => {
+        console.log('Transaction failed with error: ', error)
+        throw new Error(`Transaction failed with error: ${error}`)
+      })
   }
 
   return { book }

@@ -3,7 +3,7 @@ import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGrou
 import React, { useState, useEffect } from 'react'
 import useCurrentPlaceInfo from '../modules/useCurrentPlaceInfo'
 import usePlacesCollection from '../modules/usePlacesCollection'
-import { AppToaster } from '../modules/toaster'
+import AppToaster from '../modules/toaster'
 
 interface EditPlaceProps {
   handleClose: () => void

@@ -1,5 +1,7 @@
 import { Position, Toaster } from '@blueprintjs/core'
 
-export const AppToaster = Toaster.create({
+const AppToaster = Toaster.create({
   position: Position.BOTTOM,
 })
+
+export default AppToaster

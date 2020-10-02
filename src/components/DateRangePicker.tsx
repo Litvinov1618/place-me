@@ -1,10 +1,10 @@
 import React from 'react'
-import { DateRangePicker } from '@blueprintjs/datetime/lib/esm/dateRangePicker'
+import { DateRangePicker as DefaultDateRangePicker } from '@blueprintjs/datetime/lib/esm/dateRangePicker'
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import { IDateRangePickerProps } from '@blueprintjs/datetime/lib/esm/dateRangePicker'
 import styled from 'styled-components'
 
-const StyledDatePicker = styled(DateRangePicker)`
+const StyledDatePicker = styled(DefaultDateRangePicker)`
   & div {
     display: flex;
     flex-wrap: wrap;
@@ -12,6 +12,6 @@ const StyledDatePicker = styled(DateRangePicker)`
   }
 `
 
-const DatePicker: React.FC<IDateRangePickerProps> = (props) => <StyledDatePicker {...props} />
+const DateRangePicker: React.FC<IDateRangePickerProps> = (props) => <StyledDatePicker {...props} />
 
-export default DatePicker
+export default DateRangePicker 

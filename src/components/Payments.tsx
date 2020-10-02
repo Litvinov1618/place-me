@@ -7,7 +7,7 @@ import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navba
 import dateToString from '../modules/dateToString'
 import { FiniteDateRange, PaymentData, PaymentSnapshot } from '../interfaces'
 import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import DatePicker from './DatePicker'
+import DateRangePicker from './DateRangePicker'
 import { ButtonGroup } from '@blueprintjs/core'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
 
@@ -114,7 +114,7 @@ const Payments: React.FC = () => {
         isOpen={isDatePickerOpen}
         onClose={handleDatePickerClose}
       >
-        <DatePicker
+        <DateRangePicker
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}

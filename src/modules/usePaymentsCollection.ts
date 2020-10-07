@@ -7,7 +7,6 @@ const usePaymentsCollection = (withData: Boolean = true) => {
   const [collection] = useState(() => firestoreCollection<PaymentData>('payments'))
   const [payments, setPayments] = useState<PaymentSnapshot[]>([])
 
-  
   useEffect(() => {
     if (!withData) return
     return collection.onSnapshot(

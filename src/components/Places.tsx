@@ -63,8 +63,6 @@ const Places: React.FC = () => {
       <PlaceList places={places} filters={{ minSeats: seats, dateRange: dateRange }} />
       <Dialog
         title='Add Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isAddPlaceOpen}
         onClose={handleAddPlaceClose}
       >
@@ -72,8 +70,6 @@ const Places: React.FC = () => {
       </Dialog>
       <Dialog
         title='Choose Date Range'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isDatePickerOpen}
         onClose={handleDatePickerClose}
       >

@@ -109,8 +109,6 @@ const Payments: React.FC = () => {
       }
       <Dialog
         title='Choose Date Range'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isDatePickerOpen}
         onClose={handleDatePickerClose}
       >

@@ -60,8 +60,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
       </Card>
       <Dialog
         title='Edit Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isEditPlaceOpen}
         onClose={handleEditPlaceClose}
       >
@@ -69,8 +67,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
       </Dialog>
       <Dialog
         title='Booking Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isBookingPlaceOpen}
         onClose={handleBookingPlaceClose}
       >
@@ -80,7 +76,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         title='Bookings'
         isOpen={isViewPlaceOpen}
         onClose={handleViewPlaceClose}
-        isCloseButtonShown
       >
         {placeData.bookings.sort(({ startDate }, { endDate }) => {
           if (endDate && startDate > endDate) return -1

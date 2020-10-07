@@ -8,7 +8,7 @@ import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numeric
 import AddPlace from './AddPlace'
 import DatePicker from './DatePicker'
 import usePlacesCollection from '../modules/usePlacesCollection'
-import formatDate from '../modules/formatDate'
+import dateToString from '../modules/dateToString'
 import { ButtonGroup } from '@blueprintjs/core'
 import PlaceList from './PlaceList'
 import { BookingDateRange } from '../interfaces'
@@ -52,7 +52,7 @@ const Places: React.FC = () => {
         <ButtonGroup>
           <Button style={{ outline: 'none' }} onClick={handleDatePickerOpen}>
             {dateRange ?
-              `${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}` :
+              `${dateToString(dateRange.startDate)} - ${dateToString(dateRange.endDate)}` :
               'FirstDay - Last Day'
             }
           </Button>
@@ -81,9 +81,7 @@ const Places: React.FC = () => {
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}
-          onChange={
-            ([startDate, endDate]) => startDate && endDate && handleDatePickerChange({ startDate, endDate})
-          }
+          onChange={([startDate, endDate]) => startDate && endDate && handleDatePickerChange({ startDate, endDate})}
           minDate={new Date()}
           maxDate={new Date(Date.now() + 3e11)}
           contiguousCalendarMonths

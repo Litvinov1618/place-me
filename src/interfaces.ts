@@ -56,3 +56,5 @@ export interface PaymentData {
 }
 
 export type PaymentSnapshot = QueryDocumentSnapshot<PaymentData>
+
+export type CustomDateRange = { startDate: Date, endDate: Date | null } | null

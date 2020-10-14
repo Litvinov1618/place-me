@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { PaymentData, PaymentSnapshot } from '../interfaces'
 import firestoreCollection from './firestoreCollection'
 
-
-const usePaymentsCollection = (withData: Boolean = true) => {
+const usePaymentsCollection = (withData = true) => {
   const [collection] = useState(() => firestoreCollection<PaymentData>('payments'))
   const [payments, setPayments] = useState<PaymentSnapshot[]>([])
 

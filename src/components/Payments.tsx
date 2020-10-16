@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
-import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
-import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
-import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import dateToString from '../modules/dateToString'
-import { FiniteDateRange, PaymentData, PaymentSnapshot } from '../interfaces'
-import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
 import DateRangePicker from './DateRangePicker'
-import { ButtonGroup } from '@blueprintjs/core'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
+import FiniteDateRange from '../interfaces/FiniteDateRange'
+import PaymentSnapshot from '../interfaces/PaymentSnapshot'
+import PaymentData from '../interfaces/PaymentData'
+import Navbar from './Navbar'
+import NavbarGroup from './NavbarGroup'
+import NavbarHeading from './NavbarHeading'
+import ButtonGroup from './ButtonGroup'
+import Button from './Button'
+import Card from './Card'
+import Dialog from './Dialog'
 
 const Payments: React.FC = () => {
   const { payments } = usePaymentsCollection()
@@ -17,12 +19,12 @@ const Payments: React.FC = () => {
   const [dateRange, setDateRange] = useState<FiniteDateRange>()
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const handleDatePickerOpen = () => setIsDatePickerOpen(true)
-  const handleDatePickerClose = () => setIsDatePickerOpen(false)
-  const handleDatePickerChange = (dateRange: FiniteDateRange) => {
+  const onDatePickerOpen = () => setIsDatePickerOpen(true)
+  const onDatePickerClose = () => setIsDatePickerOpen(false)
+  const onDatePickerChange = (dateRange: FiniteDateRange) => {
     setDateRange(dateRange)
     setShowResetButton(true)
-    handleDatePickerClose()
+    onDatePickerClose()
   }
 
   const [showResetButton, setShowResetButton] = useState(false)
@@ -72,7 +74,7 @@ const Payments: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <ButtonGroup>
-        <Button onClick={handleDatePickerOpen}>
+        <Button onClick={onDatePickerOpen}>
           {dateRange ?
             `${dateToString(dateRange.startDate)} - ${dateToString(dateRange.endDate)}` :
             'FirstDay - Last Day'
@@ -110,13 +112,13 @@ const Payments: React.FC = () => {
       <Dialog
         title='Choose Date Range'
         isOpen={isDatePickerOpen}
-        onClose={handleDatePickerClose}
+        onClose={onDatePickerClose}
       >
         <DateRangePicker
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}
-          onChange={([startDate, endDate]) => startDate && endDate && handleDatePickerChange({ startDate, endDate})}
+          onChange={([startDate, endDate]) => startDate && endDate && onDatePickerChange({ startDate, endDate})}
           maxDate={new Date(Date.now() + 3e11)}
           contiguousCalendarMonths
         />

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { PaymentData, PaymentSnapshot } from '../interfaces'
+import PaymentData from '../interfaces/PaymentData'
+import PaymentSnapshot from '../interfaces/PaymentSnapshot'
 import firestoreCollection from './firestoreCollection'
 
 const usePaymentsCollection = (withData = true) => {

@@ -1,7 +1,7 @@
-import { Position, Toaster } from '@blueprintjs/core'
+import { Position, Toaster as DefaultToaster } from '@blueprintjs/core'
 
-const AppToaster = Toaster.create({
+const toaster = DefaultToaster.create({
   position: Position.BOTTOM,
 })
 
-export default AppToaster
+export default toaster

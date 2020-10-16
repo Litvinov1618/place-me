@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import firestoreCollection from './firestoreCollection'
-import { BookingPlaceData } from '../interfaces'
 import firebase from './firebase'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
-import Timestamp from '../modules/timestamp'
+import BookingPlaceData from '../interfaces/BookingPlaceData'
+import createFirebaseNowTimestamp from './createFirebaseNowTimestamp'
 
 const useBookingPlace = (placeId: string) => {
   const [collection] = useState(() => firestoreCollection('places'))
 
   const { add } = usePaymentsCollection(false)
 
-  const book = (bookingPlaceData: BookingPlaceData, oldBookings: BookingPlaceData[] = []) => {
+  const book = (bookingPlaceData: BookingPlaceData, existingBookings: BookingPlaceData[] = []) => {
     return firebase
       .firestore()
       .runTransaction(async () => {
         // Check this booking does not overlap with existing ones
-        oldBookings.forEach(book => {
+        existingBookings.forEach(book => {
           if (!bookingPlaceData.endDate) {
             if (!book.endDate) {
               throw new Error('This place already has an infinite booking')
@@ -39,13 +39,13 @@ const useBookingPlace = (placeId: string) => {
 
         await collection
           .doc(placeId)
-          .update({ bookings: [...oldBookings, bookingPlaceData] })
+          .update({ bookings: [...existingBookings, bookingPlaceData] })
           .then(() => console.log('Booking added'))
           .catch(error => console.log(error))
 
         await add({
             ...bookingPlaceData,
-            paymentDate: Timestamp.now(),
+            paymentDate: createFirebaseNowTimestamp(),
             bookingDate: {
               startDate: bookingPlaceData.startDate,
               endDate: bookingPlaceData.endDate 

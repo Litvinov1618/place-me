@@ -15,4 +15,4 @@ const StyledDatePicker = styled(DefaultDateRangePicker)`
 
 const DateRangePicker: React.FC<IDateRangePickerProps> = (props) => <StyledDatePicker {...props} />
 
-export default DateRangePicker 
+export default DateRangePicker

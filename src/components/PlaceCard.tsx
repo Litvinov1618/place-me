@@ -147,7 +147,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
               isCloseButtonShown={false}
             >
               <AddPayment
-                getPaymentInfo={createPayment(booking)}
+                onSubmit={createPayment(booking)}
                 onPaymentComplete={onPaymentClose}
                 defaultPaidDays={
                   calculateDefaultPaidDays({ startDate: booking.startDate.toDate(), endDate: booking.endDate?.toDate() || null })

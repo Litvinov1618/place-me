@@ -146,7 +146,7 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
         {paidDays &&
           <AddPayment
             defaultPaidDays={paidDays}
-            getPaymentInfo={setPayment}
+            onSubmit={setPayment}
             onPaymentComplete={onPaymentClose}
             foreverFlag={foreverFlag}
           />

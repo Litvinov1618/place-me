@@ -22,16 +22,16 @@ const AddBookingDates: React.FC<AddBookingDatesProps> = (
   const currentDay = new Date()
 
   const onForeverDateRangeChange = (startDate: Date) => {
-    const bookedDays = { startDate, endDate: null }
-    setBookingDateRange(bookedDays)
-    setPaidDays(calculateDefaultPaidDays(bookedDays))
+    const bookingDateRange = { startDate, endDate: null }
+    setBookingDateRange(bookingDateRange)
+    setPaidDays(calculateDefaultPaidDays(bookingDateRange))
     onBookingDatesClose()
   }
 
-  const onFiniteDateRangeChange = (bookedDays: FiniteDateRange) => {
-    if (bookedDays.startDate && bookedDays.endDate) {
-      setBookingDateRange(bookedDays)
-      setPaidDays(calculateDefaultPaidDays(bookedDays))
+  const onFiniteDateRangeChange = (bookingDateRange: FiniteDateRange) => {
+    if (bookingDateRange.startDate && bookingDateRange.endDate) {
+      setBookingDateRange(bookingDateRange)
+      setPaidDays(calculateDefaultPaidDays(bookingDateRange))
       onBookingDatesClose()
     }
   }
@@ -44,21 +44,17 @@ const AddBookingDates: React.FC<AddBookingDatesProps> = (
       canOutsideClickClose={false}
       isCloseButtonShown={false}
     >
-      {foreverFlag ?
-        <DatePicker
-          minDate={currentDay}
-          maxDate={addYears(currentDay, 4)}
-          onChange={onForeverDateRangeChange}
-        /> :
-        <DateRangePicker
-          contiguousCalendarMonths
-          minDate={currentDay}
-          maxDate={addYears(currentDay, 4)}
-          shortcuts={false}
-          onChange={
-            ([startDate, endDate]) => startDate && endDate && onFiniteDateRangeChange({ startDate, endDate })
-          }
-        />
+      {foreverFlag
+        ? <DatePicker minDate={currentDay} maxDate={addYears(currentDay, 4)} onChange={onForeverDateRangeChange} />
+        : <DateRangePicker
+            contiguousCalendarMonths
+            minDate={currentDay}
+            maxDate={addYears(currentDay, 4)}
+            shortcuts={false}
+            onChange={
+              ([startDate, endDate]) => startDate && endDate && onFiniteDateRangeChange({ startDate, endDate })
+            }
+          />
       }
     </Dialog>
   )

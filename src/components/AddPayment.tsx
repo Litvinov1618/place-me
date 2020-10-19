@@ -6,13 +6,13 @@ import DateRangePicker from './DateRangePicker'
 import NumericInput from './NumericInput'
 
 interface AddPaymentProps {
-  getPaymentInfo: (amount: number, paidDays: FiniteDateRange) => void
+  onSubmit: (amount: number, paidDays: FiniteDateRange) => void
   defaultPaidDays: FiniteDateRange
   foreverFlag: boolean
   onPaymentComplete: () => void
 }
 
-const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, defaultPaidDays, getPaymentInfo, foreverFlag }) => {
+const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, defaultPaidDays, onSubmit, foreverFlag }) => {
   const [amount, setAmount] = useState<number>()
   const [paidDays, setPaidDays] = useState<FiniteDateRange>(() => defaultPaidDays)
 
@@ -23,7 +23,7 @@ const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, defaultPaidD
 
   const submitPayment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (amount && paidDays) getPaymentInfo(amount, paidDays)
+    if (amount && paidDays) onSubmit(amount, paidDays)
     onPaymentComplete()
   }
 

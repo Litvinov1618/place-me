@@ -17,10 +17,11 @@ import Dialog from './Dialog'
 import Alert from './Alert'
 import createFirebaseTimestampFromDate from '../modules/createFirebaseTimestampFromDate'
 import createFirebaseNowTimestamp from '../modules/createFirebaseNowTimestamp'
+import calculateDefaultPaidDays from '../modules/calculateDefaultPaidDays'
 
 const Bookings = styled.div`
   padding-left: 10px;
-  color: ${(props: {isActual: Boolean}) => props.isActual ? 'black' : 'gray'};
+  color: ${(props: {isActual: boolean}) => props.isActual ? 'black' : 'gray'};
 `
 
 interface PlaceCardProps {
@@ -86,12 +87,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
     return sendPayment
   }
 
-  const setUnpaidDays = (book: BookingPlaceData) => {
-    const { startDate, endDate } = book
-    if (endDate) return { startDate:  startDate.toDate(), endDate: endDate.toDate() }
-    else return { startDate: startDate.toDate(), endDate: null }
-  }
-
   return (
     <div>
       <Card key={placeId}>
@@ -121,7 +116,12 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         isOpen={isBookingPlaceOpen}
         onClose={onBookingPlaceClose}
       >
-        <BookPlace placeId={placeId} placeBookings={placeData.bookings} placeName={placeData.name} onClose={onBookingPlaceClose} />
+        <BookPlace
+          placeId={placeId}
+          placeBookings={placeData.bookings}
+          placeName={placeData.name}
+          onClose={onBookingPlaceClose}
+        />
       </Dialog>
       <Dialog
         title='Bookings'
@@ -131,13 +131,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         {placeData.bookings.sort(({ startDate }, { endDate }) => {
           if (endDate && startDate > endDate) return -1
           else return 1
-        }).map((book, index) => 
-          <Bookings key={index} isActual={book.startDate.toMillis() > Date.now() ? false : true}>
+        }).map((booking, index) => 
+          <Bookings key={index} isActual={booking.startDate.toMillis() <= Date.now()}>
             <h4>{index + 1}</h4>
-            <p>Amount: {book.amount}</p>
-            <p>First Day: {dateToString(book.startDate.toDate())}</p>
-            <p>Last Day: {book.endDate ? dateToString(book.endDate.toDate()) : 'Forever'}</p>
-            <p>Visitor Name: {book.visitorName}</p>
+            <p>Amount: {booking.amount}</p>
+            <p>First Day: {dateToString(booking.startDate.toDate())}</p>
+            <p>Last Day: {booking.endDate ? dateToString(booking.endDate.toDate()) : 'Forever'}</p>
+            <p>Visitor Name: {booking.visitorName}</p>
             <Button onClick={onPaymentOpen}>Add payment</Button>
             <Dialog
               title='Add payment'
@@ -147,9 +147,12 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
               isCloseButtonShown={false}
             >
               <AddPayment
-                getPaymentInfo={createPayment(book)}
+                getPaymentInfo={createPayment(booking)}
                 onPaymentComplete={onPaymentClose}
-                unpaidDays={setUnpaidDays(book)}
+                defaultPaidDays={
+                  calculateDefaultPaidDays({ startDate: booking.startDate.toDate(), endDate: booking.endDate?.toDate() || null })
+                }
+                foreverFlag={true}
               />
             </Dialog>
           </Bookings>

@@ -18,18 +18,17 @@ const PlaceList: React.FC<PlaceListProps> = ({ places, filters }) => {
     if (dateRange) {
       const { startDate, endDate } = dateRange
 
-      for (let book of placeData.bookings) {
-        if (book.endDate) {
-          if (endDate > book.startDate.toDate()) {
-            return false
-          }
+      for (let booking of placeData.bookings) {
+        if (!booking.endDate) continue
+        if (endDate > booking.startDate.toDate()) {
+          return false
+        }
 
-          if (
-            endDate >= book.startDate.toDate() &&
-            startDate <= book.endDate.toDate()
-          ) {
-            return false
-          }
+        if (
+          endDate >= booking.startDate.toDate() &&
+          startDate <= booking.endDate.toDate()
+        ) {
+          return false
         }
       }
     }

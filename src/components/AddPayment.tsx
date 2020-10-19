@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import CustomDateRange from '../interfaces/CustomDateRange'
+import React, { useState } from 'react'
 import FiniteDateRange from '../interfaces/FiniteDateRange'
 import addYears from '../modules/addYears'
 import Button from './Button'
@@ -8,38 +7,14 @@ import NumericInput from './NumericInput'
 
 interface AddPaymentProps {
   getPaymentInfo: (amount: number, paidDays: FiniteDateRange) => void
-  unpaidDays: CustomDateRange
+  defaultPaidDays: FiniteDateRange
+  foreverFlag: boolean
   onPaymentComplete: () => void
 }
 
-const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, unpaidDays, getPaymentInfo }) => {
+const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, defaultPaidDays, getPaymentInfo, foreverFlag }) => {
   const [amount, setAmount] = useState<number>()
-  const [paidDays, setPaidDays] = useState<FiniteDateRange>()
-
-  const setDefaultPaidDays = (unpaidDays: CustomDateRange) => {
-    if (!unpaidDays) return
-    if (unpaidDays?.endDate) {
-      setPaidDays({ startDate: unpaidDays.startDate, endDate: unpaidDays.endDate })
-      return
-    }
-
-    const date = unpaidDays!.startDate
-    const lastDayOfMonth = (year: number, month: number) => new Date(year, month + 1, 0)
-    const lastDayOfNextMonth = lastDayOfMonth(date.getFullYear(), date.getMonth() + 1)
-
-    if (
-      lastDayOfMonth(date.getFullYear(), date.getMonth()).getDate() === date.getDate() ||
-      date.getDate() > lastDayOfNextMonth.getDate()
-    ) setPaidDays({ startDate: unpaidDays!.startDate, endDate: lastDayOfNextMonth })
-    else {
-      const endDate = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate())
-      setPaidDays({ startDate: unpaidDays!.startDate, endDate })
-    }
-  }
-
-  useEffect(() => {
-    setDefaultPaidDays(unpaidDays)
-  }, [unpaidDays])
+  const [paidDays, setPaidDays] = useState<FiniteDateRange>(() => defaultPaidDays)
 
   const onAmountChange = (value: number) => {
     if (isNaN(value)) setAmount(0)
@@ -61,7 +36,7 @@ const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, unpaidDays, 
         <DateRangePicker
         defaultValue={[paidDays.startDate, paidDays.endDate]}
         minDate={paidDays.startDate}
-        maxDate={unpaidDays?.endDate || addYears(currentDay, 2)}
+        maxDate={foreverFlag ? addYears(currentDay, 2) : paidDays.startDate}
         onChange={
           ([startDate, endDate]) => startDate && endDate && setPaidDays({ startDate, endDate })
         }

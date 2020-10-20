@@ -1,28 +1,30 @@
 import React, { useState } from 'react'
-import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
-import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
-import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
-import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
 import dateToString from '../modules/dateToString'
-import { BookingDateRange, PaymentData, PaymentSnapshot } from '../interfaces'
-import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import DatePicker from './DatePicker'
-import { ButtonGroup } from '@blueprintjs/core'
+import DateRangePicker from './DateRangePicker'
 import usePaymentsCollection from '../modules/usePaymentsCollection'
+import FiniteDateRange from '../interfaces/FiniteDateRange'
+import PaymentSnapshot from '../interfaces/PaymentSnapshot'
+import PaymentData from '../interfaces/PaymentData'
+import Navbar from './Navbar'
+import NavbarGroup from './NavbarGroup'
+import NavbarHeading from './NavbarHeading'
+import ButtonGroup from './ButtonGroup'
+import Button from './Button'
+import Card from './Card'
+import Dialog from './Dialog'
 
 const Payments: React.FC = () => {
   const { payments } = usePaymentsCollection()
 
-  const [dateRange, setDateRange] = useState<BookingDateRange>()
+  const [dateRange, setDateRange] = useState<FiniteDateRange>()
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const handleDatePickerOpen = () => setIsDatePickerOpen(true)
-  const handleDatePickerClose = () => setIsDatePickerOpen(false)
-  const handleDatePickerChange = (dateRange: BookingDateRange) => {
+  const onDatePickerOpen = () => setIsDatePickerOpen(true)
+  const onDatePickerClose = () => setIsDatePickerOpen(false)
+  const onDatePickerChange = (dateRange: FiniteDateRange) => {
     setDateRange(dateRange)
     setShowResetButton(true)
-    handleDatePickerClose()
+    onDatePickerClose()
   }
 
   const [showResetButton, setShowResetButton] = useState(false)
@@ -42,18 +44,25 @@ const Payments: React.FC = () => {
     return total
   }
 
-  const verifyPayments = (paymentData: PaymentData, dateRange?: {startDate: Date, endDate: Date}) => {
+  const verifyPayments = (paymentData: PaymentData, dateRange?: FiniteDateRange) => {
     if (dateRange) {
       const { startDate, endDate } = dateRange
-  
-      if (
-        startDate.getTime() <= paymentData.bookingDate.lastDay && 
-        endDate.getTime() >= paymentData.bookingDate.firstDay
-      ) {
-        return false
+      const { bookingDate } = paymentData
+
+      if (bookingDate.endDate) {
+        if (
+          endDate >= bookingDate.startDate.toDate() &&
+          startDate <= bookingDate.endDate.toDate()
+        ) {
+          return true
+        }
+      } else if (bookingDate.startDate.toDate() < endDate) {
+        return true
       }
+
+      return false
     }
-  
+
     return true
   }
 
@@ -65,7 +74,7 @@ const Payments: React.FC = () => {
         </NavbarGroup>
       </Navbar>
       <ButtonGroup>
-        <Button onClick={handleDatePickerOpen}>
+        <Button onClick={onDatePickerOpen}>
           {dateRange ?
             `${dateToString(dateRange.startDate)} - ${dateToString(dateRange.endDate)}` :
             'FirstDay - Last Day'
@@ -76,34 +85,40 @@ const Payments: React.FC = () => {
       <h3 className='bp3-heading'>Total: {countTotal(payments)}</h3>
       {payments
         .filter(payment => verifyPayments(payment.data(), dateRange))
-        .map((payment) => <Card key={payment.id}>
-            <p className='bp3-ui-text'>
-              Payment Date: {dateToString(new Date(payment.data().paymentDate))}
-            </p>
-            <p className='bp3-ui-text'>
-              Amount: {payment.data().amount} ₴
-            </p>
-            <p className='bp3-ui-text'>
-              Name: {payment.data().visitorName}
-            </p>
-            <p className='bp3-ui-text'>
-              Place: {payment.data().placeName} {dateToString(new Date(payment.data().bookingDate.firstDay))} - {dateToString(new Date(payment.data().bookingDate.lastDay))}
-            </p>
-          </Card>
-        )
+        .map((payment) => {
+          const { paymentDate, visitorName, placeName, amount, paidDays, bookingDate } = payment.data()
+          return (
+            <Card key={payment.id}>
+              <p className='bp3-ui-text'>
+                Payment Date: {dateToString(paymentDate.toDate())}
+              </p>
+              <p className='bp3-ui-text'>
+                Amount: {amount} ₴
+              </p>
+              <p className='bp3-ui-text'>
+                Name: {visitorName}
+              </p>
+              <p className='bp3-ui-text'>
+                Place: {placeName}, {dateToString(bookingDate.startDate.toDate())} -&nbsp;
+                {bookingDate.endDate ? dateToString(bookingDate.endDate!.toDate()) : 'Forever'}
+              </p>
+              <p>
+                Paid days: {dateToString(paidDays.startDate.toDate())} - {dateToString(paidDays.endDate.toDate())}
+              </p>
+            </Card>
+          )
+        })
       }
       <Dialog
         title='Choose Date Range'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isDatePickerOpen}
-        onClose={handleDatePickerClose}
+        onClose={onDatePickerClose}
       >
-        <DatePicker
+        <DateRangePicker
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}
-          onChange={([startDate, endDate]) => startDate && endDate && handleDatePickerChange({ startDate, endDate})}
+          onChange={([startDate, endDate]) => startDate && endDate && onDatePickerChange({ startDate, endDate})}
           maxDate={new Date(Date.now() + 3e11)}
           contiguousCalendarMonths
         />

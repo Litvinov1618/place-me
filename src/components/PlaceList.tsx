@@ -1,5 +1,7 @@
 import React from 'react'
-import { PlaceData, PlaceSnapshot, Filters } from '../interfaces'
+import Filters from '../interfaces/Filters'
+import PlaceData from '../interfaces/PlaceData'
+import PlaceSnapshot from '../interfaces/PlaceSnapshot'
 import PlaceCard from './PlaceCard'
 
 interface PlaceListProps {
@@ -16,8 +18,16 @@ const PlaceList: React.FC<PlaceListProps> = ({ places, filters }) => {
     if (dateRange) {
       const { startDate, endDate } = dateRange
 
-      for (let book of placeData.bookings) {
-        if (startDate.getTime() <= book.lastDay && endDate.getTime() >= book.firstDay) {
+      for (let booking of placeData.bookings) {
+        if (!booking.endDate) continue
+        if (endDate > booking.startDate.toDate()) {
+          return false
+        }
+
+        if (
+          endDate >= booking.startDate.toDate() &&
+          startDate <= booking.endDate.toDate()
+        ) {
           return false
         }
       }

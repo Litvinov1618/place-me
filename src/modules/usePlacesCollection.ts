@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
-import { PlaceSnapshot, PlaceData, EditPlaceData, AddPlaceData } from '../interfaces'
+import AddPlaceData from '../interfaces/AddPlaceData'
+import EditPlaceData from '../interfaces/EditPlaceData'
+import PlaceData from '../interfaces/PlaceData'
+import PlaceSnapshot from '../interfaces/PlaceSnapshot'
 import firestoreCollection from './firestoreCollection'
 
 const usePlacesCollection = (withData = true) => {

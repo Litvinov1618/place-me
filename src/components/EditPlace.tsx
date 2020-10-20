@@ -1,36 +1,29 @@
-import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
-import React, { useState, useEffect } from 'react'
-import useCurrentPlaceInfo from '../modules/useCurrentPlaceInfo'
+import React, { useState } from 'react'
 import usePlacesCollection from '../modules/usePlacesCollection'
-import { AppToaster } from '../modules/toaster'
+import AppToaster from '../modules/toaster'
+import InputGroup from './InputGroup'
+import Button from './Button'
 
 interface EditPlaceProps {
-  handleClose: () => void
+  onClose: () => void
   placeId: string
+  defaultName: string
+  defaultSeats: string
 }
 
-const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
-  const [name, setName] = useState<string>('')
-  const [seats, setSeats] = useState<string>('')
-  const { placeData } = useCurrentPlaceInfo(placeId)
+const EditPlace: React.FC<EditPlaceProps> = ({ onClose, placeId, defaultName, defaultSeats }) => {
+  const [name, setName] = useState<string>(() => defaultName)
+  const [seats, setSeats] = useState<string>(() => defaultSeats)
   const { edit } = usePlacesCollection(false)
 
-  useEffect(() => {
-    if (placeData) {
-      setName(placeData.name)
-      setSeats(String(placeData.seats))
-    }
-  }, [placeData])
+  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value)
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value)
-
-  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
+  const onSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => setSeats(event.target.value)
 
   const editPlace = () => {
     edit(placeId, { name, seats: +seats })
       .then(() => {
-        handleClose()
+        onClose()
         AppToaster.show({ message: 'Place edited.' })
       })
       .catch(error => console.log(error))
@@ -39,8 +32,8 @@ const EditPlace: React.FC<EditPlaceProps> = ({ handleClose, placeId }) => {
   return (
     <>
       <h3 style={{ color: 'red' }}>Validation Error</h3>
-      <InputGroup onChange={handleNameChange} value={name} placeholder='Place name'></InputGroup>
-      <InputGroup onChange={handleSeatsChange} value={seats} placeholder='Seats' />
+      <InputGroup onChange={onNameChange} value={name} placeholder='Place name'></InputGroup>
+      <InputGroup onChange={onSeatsChange} value={seats} placeholder='Seats' />
       <Button onClick={editPlace}>Save</Button>
     </>
   )

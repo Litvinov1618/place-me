@@ -1,34 +1,34 @@
 import React, { useState } from 'react'
-import { Navbar } from '@blueprintjs/core/lib/esm/components/navbar/navbar'
-import { NavbarGroup } from '@blueprintjs/core/lib/esm/components/navbar/navbarGroup'
-import { NavbarHeading } from '@blueprintjs/core/lib/esm/components/navbar/navbarHeading'
-import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numericInput'
 import AddPlace from './AddPlace'
-import DatePicker from './DatePicker'
+import DateRangePicker from './DateRangePicker'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import dateToString from '../modules/dateToString'
-import { ButtonGroup } from '@blueprintjs/core'
 import PlaceList from './PlaceList'
-import { BookingDateRange } from '../interfaces'
+import FiniteDateRange from '../interfaces/FiniteDateRange'
+import Navbar from './Navbar'
+import NavbarHeading from './NavbarHeading'
+import NavbarGroup from './NavbarGroup'
+import Button from './Button'
+import ButtonGroup from './ButtonGroup'
+import NumericInput from './NumericInput'
+import Dialog from './Dialog'
 
 const Places: React.FC = () => {
   const { places } = usePlacesCollection()
 
   const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false)
-  const handleAddPlaceOpen = () => setIsAddPlaceOpen(true)
-  const handleAddPlaceClose = () => setIsAddPlaceOpen(false)
+  const onAddPlaceOpen = () => setIsAddPlaceOpen(true)
+  const onAddPlaceClose = () => setIsAddPlaceOpen(false)
 
-  const [dateRange, setDateRange] = useState<BookingDateRange>()
+  const [dateRange, setDateRange] = useState<FiniteDateRange>()
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const handleDatePickerOpen = () => setIsDatePickerOpen(true)
-  const handleDatePickerClose = () => setIsDatePickerOpen(false)
-  const handleDatePickerChange = (dateRange: BookingDateRange) => {
+  const onDatePickerOpen = () => setIsDatePickerOpen(true)
+  const onDatePickerClose = () => setIsDatePickerOpen(false)
+  const onDatePickerChange = (dateRange: FiniteDateRange) => {
     setDateRange(dateRange)
     setShowResetButton(true)
-    handleDatePickerClose()
+    onDatePickerClose()
   }
 
   const [showResetButton, setShowResetButton] = useState(false)
@@ -45,12 +45,12 @@ const Places: React.FC = () => {
       <Navbar>
         <NavbarGroup>
           <NavbarHeading>Places</NavbarHeading>
-          <Button onClick={handleAddPlaceOpen} minimal icon='add' />
+          <Button onClick={onAddPlaceOpen} minimal icon='add' />
         </NavbarGroup>
       </Navbar>
       <div>
         <ButtonGroup>
-          <Button style={{ outline: 'none' }} onClick={handleDatePickerOpen}>
+          <Button style={{ outline: 'none' }} onClick={onDatePickerOpen}>
             {dateRange ?
               `${dateToString(dateRange.startDate)} - ${dateToString(dateRange.endDate)}` :
               'FirstDay - Last Day'
@@ -63,25 +63,21 @@ const Places: React.FC = () => {
       <PlaceList places={places} filters={{ minSeats: seats, dateRange: dateRange }} />
       <Dialog
         title='Add Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isAddPlaceOpen}
-        onClose={handleAddPlaceClose}
+        onClose={onAddPlaceClose}
       >
-        <AddPlace handleClose={handleAddPlaceClose} />
+        <AddPlace onClose={onAddPlaceClose} />
       </Dialog>
       <Dialog
         title='Choose Date Range'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isDatePickerOpen}
-        onClose={handleDatePickerClose}
+        onClose={onDatePickerClose}
       >
-        <DatePicker
+        <DateRangePicker
           allowSingleDayRange
           defaultValue={dateRange && [dateRange.startDate, dateRange.endDate]}
           shortcuts={false}
-          onChange={([startDate, endDate]) => startDate && endDate && handleDatePickerChange({ startDate, endDate})}
+          onChange={([startDate, endDate]) => startDate && endDate && onDatePickerChange({ startDate, endDate})}
           minDate={new Date()}
           maxDate={new Date(Date.now() + 3e11)}
           contiguousCalendarMonths

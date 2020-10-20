@@ -1,14 +1,28 @@
 import React, { useState } from 'react'
-import { Alert } from '@blueprintjs/core/lib/esm/components/alert/alert'
-import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card'
-import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
-import { PlaceData } from '../interfaces'
-import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog'
-import { AppToaster } from '../modules/toaster'
+import toaster from '../modules/toaster'
 import EditPlace from './EditPlace'
 import usePlacesCollection from '../modules/usePlacesCollection'
 import BookPlace from './BookPlace'
+import dateToString from '../modules/dateToString'
+import styled from 'styled-components'
+import usePaymentsCollection from '../modules/usePaymentsCollection'
+import AddPayment from './AddPayment'
+import PlaceData from '../interfaces/PlaceData'
+import BookingPlaceData from '../interfaces/BookingPlaceData'
+import FiniteDateRange from '../interfaces/FiniteDateRange'
+import Card from './Card'
+import Icon from './Icon'
+import Button from './Button'
+import Dialog from './Dialog'
+import Alert from './Alert'
+import createFirebaseTimestampFromDate from '../modules/createFirebaseTimestampFromDate'
+import createFirebaseNowTimestamp from '../modules/createFirebaseNowTimestamp'
+import calculateDefaultPaidDays from '../modules/calculateDefaultPaidDays'
+
+const Bookings = styled.div`
+  padding-left: 10px;
+  color: ${(props: {isActual: boolean}) => props.isActual ? 'black' : 'gray'};
+`
 
 interface PlaceCardProps {
   placeId: string
@@ -17,22 +31,60 @@ interface PlaceCardProps {
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
   const { remove } = usePlacesCollection(false)
+  const { add } = usePaymentsCollection(false)
 
   const [isEditPlaceOpen, setIsEditPlaceOpen] = useState(false)
-  const handleEditPlaceClose = () => setIsEditPlaceOpen(false)
-  const handleEditPlaceOpen = () => setIsEditPlaceOpen(true)
+  const onEditPlaceClose = () => setIsEditPlaceOpen(false)
+  const onEditPlaceOpen = () => setIsEditPlaceOpen(true)
   
   const [isBookingPlaceOpen, setIsBookingPlaceOpen] = useState(false)
-  const handleBookingPlaceOpen = () => setIsBookingPlaceOpen(true)
-  const handleBookingPlaceClose = () => setIsBookingPlaceOpen(false)
+  const onBookingPlaceOpen = () => setIsBookingPlaceOpen(true)
+  const onBookingPlaceClose = () => setIsBookingPlaceOpen(false)
 
   const [isDeletionAlertOpen, setIsDeletionAlertOpen] = useState(false)
-  const handleDeletionAlertOpen = () => setIsDeletionAlertOpen(true)
-  const handleDeletionAlertClose = () => setIsDeletionAlertOpen(false)  
+  const onDeletionAlertOpen = () => setIsDeletionAlertOpen(true)
+  const onDeletionAlertClose = () => setIsDeletionAlertOpen(false)
+
+  const [isViewPlaceOpen, setIsViewPlaceOpen] = useState(false)
+  const onViewPlaceOpen = () => setIsViewPlaceOpen(true)
+  const onViewPlaceClose = () => setIsViewPlaceOpen(false)
+
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const onPaymentClose = () => setIsPaymentOpen(false)
+  const onPaymentOpen = () => setIsPaymentOpen(true)
 
   const removePlace = () => {
     remove(placeId)
-    AppToaster.show({ message: 'Place deleted.', intent: 'warning' })
+    toaster.show({ message: 'Place deleted.', intent: 'warning' })
+  }
+
+  const createPayment = (bookingPlaceData: BookingPlaceData) => {
+    const sendPayment = (amount: number, paidDays: FiniteDateRange) => {
+      const {
+        visitorName,
+        placeName,
+        startDate,
+        endDate
+      } = bookingPlaceData
+      add({
+        paymentDate: createFirebaseNowTimestamp(),
+        visitorName,
+        placeName,
+        bookingDate: {
+          startDate,
+          endDate
+        },
+        amount,
+        paidDays: {
+          startDate: createFirebaseTimestampFromDate(paidDays.startDate),
+          endDate: createFirebaseTimestampFromDate(paidDays.endDate)
+        }
+      })
+      .then(() => toaster.show({ message: 'Payment added successfully' }))
+      .catch(({ message }) => toaster.show({ message, intent: 'danger'}))
+    }
+
+    return sendPayment
   }
 
   return (
@@ -42,34 +94,76 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         <p>
           <Icon icon='people' /> {placeData.seats}
         </p>
-        <Button onClick={handleBookingPlaceOpen}>Book</Button>
-        <Button onClick={handleEditPlaceOpen}>Edit</Button>
-        <Button onClick={handleDeletionAlertOpen} intent='danger'>Delete</Button>
+        <Button onClick={onBookingPlaceOpen}>Book</Button>
+        <Button onClick={onEditPlaceOpen}>Edit</Button>
+        <Button onClick={onViewPlaceOpen}>View Bookings</Button>
+        <Button onClick={onDeletionAlertOpen} intent='danger'>Delete</Button>
       </Card>
       <Dialog
         title='Edit Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isEditPlaceOpen}
-        onClose={handleEditPlaceClose}
+        onClose={onEditPlaceClose}
       >
-        <EditPlace placeId={placeId} handleClose={handleEditPlaceClose} />
+        <EditPlace 
+          defaultName={placeData.name}
+          defaultSeats={placeData.seats + ''}
+          placeId={placeId}
+          onClose={onEditPlaceClose}
+        />
       </Dialog>
       <Dialog
         title='Booking Place'
-        canOutsideClickClose
-        isCloseButtonShown
         isOpen={isBookingPlaceOpen}
-        onClose={handleBookingPlaceClose}
+        onClose={onBookingPlaceClose}
       >
-        <BookPlace placeId={placeId} placeBookings={placeData.bookings} placeName={placeData.name} handleClose={handleBookingPlaceClose} />
+        <BookPlace
+          placeId={placeId}
+          placeBookings={placeData.bookings}
+          placeName={placeData.name}
+          onClose={onBookingPlaceClose}
+        />
+      </Dialog>
+      <Dialog
+        title='Bookings'
+        isOpen={isViewPlaceOpen}
+        onClose={onViewPlaceClose}
+      >
+        {placeData.bookings.sort(({ startDate }, { endDate }) => {
+          if (endDate && startDate > endDate) return -1
+          else return 1
+        }).map((booking, index) => 
+          <Bookings key={index} isActual={booking.startDate.toMillis() <= Date.now()}>
+            <h4>{index + 1}</h4>
+            <p>Amount: {booking.amount}</p>
+            <p>First Day: {dateToString(booking.startDate.toDate())}</p>
+            <p>Last Day: {booking.endDate ? dateToString(booking.endDate.toDate()) : 'Forever'}</p>
+            <p>Visitor Name: {booking.visitorName}</p>
+            <Button onClick={onPaymentOpen}>Add payment</Button>
+            <Dialog
+              title='Add payment'
+              isOpen={isPaymentOpen}
+              onClose={onPaymentClose}
+              canOutsideClickClose={false}
+              isCloseButtonShown={false}
+            >
+              <AddPayment
+                onSubmit={createPayment(booking)}
+                onPaymentComplete={onPaymentClose}
+                defaultPaidDays={
+                  calculateDefaultPaidDays({ startDate: booking.startDate.toDate(), endDate: booking.endDate?.toDate() || null })
+                }
+                foreverFlag={true}
+              />
+            </Dialog>
+          </Bookings>
+        )}
       </Dialog>
       <Alert
         isOpen={isDeletionAlertOpen}
-        onClose={handleDeletionAlertClose}
+        onClose={onDeletionAlertClose}
         cancelButtonText='Cancel'
         confirmButtonText='Delete'
-        onCancel={handleDeletionAlertClose}
+        onCancel={onDeletionAlertClose}
         onConfirm={removePlace}
         intent='danger'
       >

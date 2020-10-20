@@ -1,53 +1,184 @@
 import React, { useState } from 'react'
-import { AnchorButton } from '@blueprintjs/core/lib/esm/components/button/buttons'
-import { InputGroup } from '@blueprintjs/core/lib/esm/components/forms/inputGroup'
-import DatePicker from './DatePicker'
-import { DateRange } from '@blueprintjs/datetime/lib/esm/common/dateRange'
 import useBookingPlace from '../modules/useBookingPlace'
-import { Classes } from '@blueprintjs/core/lib/esm/common'
-import { BookingPlaceData } from '../interfaces'
+import toaster from '../modules/toaster'
+import dateToString from '../modules/dateToString'
+import AddPayment from './AddPayment'
+import BookingPlaceData from '../interfaces/BookingPlaceData'
+import FiniteDateRange from '../interfaces/FiniteDateRange'
+import CustomDateRange from '../interfaces/CustomDateRange'
+import Button from './Button'
+import InputGroup from './InputGroup'
+import Checkbox from './Checkbox'
+import Dialog from './Dialog'
+import createFirebaseTimestampFromDate  from '../modules/createFirebaseTimestampFromDate'
+import calculateDefaultPaidDays from '../modules/calculateDefaultPaidDays'
+import AddBookingDates from './AddBookingDates'
 
 interface BookPlaceProps {
   placeId: string
-  handleClose: () => void
+  onClose: () => void
   placeBookings: BookingPlaceData[]
-  placeName: string 
+  placeName: string
 }
 
-const BookPlace: React.FC<BookPlaceProps> = ({ handleClose, placeId, placeBookings, placeName }) => {
-  const { book } = useBookingPlace(placeId)
+const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, placeName }) => {
+  // Working with dates
+  const [bookingDateRange, setBookingDateRange] = useState<CustomDateRange>()
+  const [paidDays, setPaidDays] = useState<FiniteDateRange>()
 
-  const [dateRange, setDateRange] = useState<DateRange>([null, null])
-  const handleDateRangeChange = (dateRange: DateRange) => setDateRange(dateRange)
-
-  const [visitorName, setVisitorName] = useState('')
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setVisitorName(event.target.value)
-
-  const [amount, setAmount] = useState('')
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => setAmount(event.target.value)
-
-  const bookPlace = () => {
-    const [firstDay, lastDay] = dateRange
-    if (firstDay && lastDay) {
-      book({ firstDay: firstDay.getTime(), lastDay: lastDay.getTime(), visitorName, placeName, amount: +amount }, placeBookings)
-        .then(handleClose)
-        .catch(error => console.log(error))
+  const [foreverFlag, setForeverFlag] = useState(false)
+  const toggleForeverFlag = () => {
+    setForeverFlag(!foreverFlag)
+    if (bookingDateRange) {
+      setBookingDateRange(bookingDateRange)
+      setPaidDays(calculateDefaultPaidDays(bookingDateRange))
     }
   }
 
+  // Getting info from inputs
+  const [visitorName, setVisitorName] = useState<string>('')
+  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setVisitorName(event.target.value)
+
+  const [amount, setAmount] = useState<number>()
+
+  const [disabledFlag, setDisabledFlag] = useState(false)
+
+  const setPayment = (amount: number, paidDays: FiniteDateRange) => {
+    setAmount(amount)
+    setPaidDays(paidDays)
+  }
+
+  // Getting and sending data with firebase
+  const { book } = useBookingPlace(placeId)
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setDisabledFlag(true)
+
+    if (!bookingDateRange || !paidDays || !visitorName || !amount) {
+      setDisabledFlag(false)
+      return
+    }
+    else bookPlace(amount, paidDays, bookingDateRange)
+  }
+
+  const validateBookings = (existingBooking: BookingPlaceData, newBooking: BookingPlaceData) => {
+    if (!newBooking.endDate) {
+      if (!existingBooking.endDate) {
+        return false
+      } else if (existingBooking.endDate >= newBooking.startDate) {
+        return false
+      }
+    }
+
+    if (existingBooking.endDate) {
+      if (
+        existingBooking.endDate >= newBooking.startDate &&
+        existingBooking.startDate <= newBooking.endDate!
+      ) {
+        return false
+      }
+    } else if (existingBooking.startDate < newBooking.endDate! ) {
+      return false
+    }
+
+    return true
+  }
+
+  const bookPlace = (amount: number, paidDays: FiniteDateRange, bookingDateRange: CustomDateRange) => {
+    const newBooking = {
+      startDate: createFirebaseTimestampFromDate(bookingDateRange.startDate),
+      endDate: bookingDateRange.endDate ? createFirebaseTimestampFromDate(bookingDateRange.endDate) : null,
+      visitorName,
+      placeName,
+      amount,
+      paidDays: {
+        startDate: createFirebaseTimestampFromDate(paidDays.startDate),
+        endDate: createFirebaseTimestampFromDate(paidDays.endDate)
+      }
+    }
+
+    if (!placeBookings.every((existingBooking) => validateBookings(existingBooking, newBooking))) {
+      toaster.show({ message: 'This place is already have booked on this day', intent: 'danger' })
+      setDisabledFlag(false)
+      return
+    }
+    book(newBooking, placeBookings)
+    .then(() => {
+      toaster.show({ message: 'The place has been booked' })
+      setDisabledFlag(false)
+      onClose()
+    })
+    .catch(({ message }) => {
+      toaster.show({ message, intent: 'danger' })
+      setDisabledFlag(false)
+    })
+  }
+
+  // Managing modal windows
+  const [isBookingDatesOpen, setIsBookingDatesOpen] = useState(false)
+  const onBookingDatesOpen = () => setIsBookingDatesOpen(true)
+  const onBookingDatesClose = () => setIsBookingDatesOpen(false)
+
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const onPaymentOpen = () => setIsPaymentOpen(true)
+  const onPaymentClose = () => setIsPaymentOpen(false)
+
   return (
     <div>
-      <DatePicker
-        contiguousCalendarMonths
-        minDate={new Date()}
-        maxDate={new Date(Date.now() + 3e11)}
-        className={Classes.ELEVATION_1}
-        shortcuts={false}
-        onChange={handleDateRangeChange} 
+      <form onSubmit={onSubmit}>
+        <Checkbox
+          checked={foreverFlag}
+          onChange={toggleForeverFlag}
+          disabled={disabledFlag}
+          label='Forever booking'
+        />
+        <Button disabled={disabledFlag} onClick={onBookingDatesOpen}>
+          {bookingDateRange ?
+            `Booked Days: ${dateToString(bookingDateRange.startDate)} - 
+            ${bookingDateRange?.endDate ? dateToString(bookingDateRange.endDate) : 'Forever'}` :
+            'Choose Booking Dates'
+          }
+        </Button>
+        <InputGroup 
+          required
+          disabled={disabledFlag}
+          placeholder='Name'
+          value={visitorName}
+          onChange={onNameChange}
+        />
+        <Button onClick={onPaymentOpen} disabled={disabledFlag || !bookingDateRange}>
+          {paidDays ?
+            `Paid days: ${dateToString(paidDays.startDate)} - ${dateToString(paidDays.endDate)}` :
+            'Add payment'
+          }
+        </Button>
+        <Button type='submit' disabled={!bookingDateRange || !paidDays || !visitorName || !amount || disabledFlag}>
+          Book
+        </Button>
+      </form>
+      <AddBookingDates
+        setBookingDateRange={setBookingDateRange}
+        setPaidDays={setPaidDays}
+        foreverFlag={foreverFlag}
+        onBookingDatesClose={onBookingDatesClose}
+        isBookingDatesOpen={isBookingDatesOpen}
       />
-      <InputGroup placeholder='Name' value={visitorName} onChange={handleNameChange}></InputGroup>
-      <InputGroup placeholder='Amount' value={amount} onChange={handleAmountChange}></InputGroup>
-      <AnchorButton text='Book' onClick={bookPlace}></AnchorButton>
+      <Dialog
+        title='Add payment'
+        isOpen={isPaymentOpen}
+        onClose={onPaymentClose}
+        canOutsideClickClose={false}
+        isCloseButtonShown={false}
+      >
+        {paidDays &&
+          <AddPayment
+            defaultPaidDays={paidDays}
+            onSubmit={setPayment}
+            onPaymentComplete={onPaymentClose}
+            foreverFlag={foreverFlag}
+          />
+        }
+      </Dialog>
     </div>
   )
 }

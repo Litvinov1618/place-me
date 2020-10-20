@@ -61,21 +61,48 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
     else bookPlace(amount, paidDays, bookingDateRange)
   }
 
+  const validateBookings = (existingBooking: BookingPlaceData, newBooking: BookingPlaceData) => {
+    if (!newBooking.endDate) {
+      if (!existingBooking.endDate) {
+        return false
+      } else if (existingBooking.endDate >= newBooking.startDate) {
+        return false
+      }
+    }
+
+    if (existingBooking.endDate) {
+      if (
+        existingBooking.endDate >= newBooking.startDate &&
+        existingBooking.startDate <= newBooking.endDate!
+      ) {
+        return false
+      }
+    } else if (existingBooking.startDate < newBooking.endDate! ) {
+      return false
+    }
+
+    return true
+  }
+
   const bookPlace = (amount: number, paidDays: FiniteDateRange, bookingDateRange: CustomDateRange) => {
-    if (!bookingDateRange) return
-    book(
-      {
-        startDate: createFirebaseTimestampFromDate(bookingDateRange.startDate),
-        endDate: bookingDateRange.endDate ? createFirebaseTimestampFromDate(bookingDateRange.endDate) : null,
-        visitorName,
-        placeName,
-        amount,
-        paidDays: {
-          startDate: createFirebaseTimestampFromDate(paidDays.startDate),
-          endDate: createFirebaseTimestampFromDate(paidDays.endDate)
-        }
-      }, placeBookings
-    )
+    const newBooking = {
+      startDate: createFirebaseTimestampFromDate(bookingDateRange.startDate),
+      endDate: bookingDateRange.endDate ? createFirebaseTimestampFromDate(bookingDateRange.endDate) : null,
+      visitorName,
+      placeName,
+      amount,
+      paidDays: {
+        startDate: createFirebaseTimestampFromDate(paidDays.startDate),
+        endDate: createFirebaseTimestampFromDate(paidDays.endDate)
+      }
+    }
+
+    if (!placeBookings.every((existingBooking) => validateBookings(existingBooking, newBooking))) {
+      toaster.show({ message: 'This place is already have booked on this day', intent: 'danger' })
+      setDisabledFlag(false)
+      return
+    }
+    book(newBooking, placeBookings)
     .then(() => {
       toaster.show({ message: 'The place has been booked' })
       setDisabledFlag(false)

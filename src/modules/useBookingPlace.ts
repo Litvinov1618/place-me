@@ -10,33 +10,10 @@ const useBookingPlace = (placeId: string) => {
 
   const { add } = usePaymentsCollection(false)
 
-  const book = (bookingPlaceData: BookingPlaceData, existingBookings: BookingPlaceData[] = []) => {
+  const book = (bookingPlaceData: BookingPlaceData, existingBookings: BookingPlaceData[]) => {
     return firebase
       .firestore()
       .runTransaction(async () => {
-        // Check this booking does not overlap with existing ones
-        existingBookings.forEach(book => {
-          if (!bookingPlaceData.endDate) {
-            if (!book.endDate) {
-              throw new Error('This place already has an infinite booking')
-            } else if (book.endDate >= bookingPlaceData.startDate) {
-              throw new Error('This place is already have booked at this time')
-            }
-          }
-
-          if (book.endDate) {
-            if (
-              book.endDate >= bookingPlaceData.startDate &&
-              book.startDate <= bookingPlaceData.endDate!
-            ) {
-              throw new Error('This place is already have booked at this time')
-            }
-          } else if (book.startDate < bookingPlaceData.endDate! ) {
-            throw new Error('This place is already have booked at this time')
-          }
-
-        })
-
         await collection
           .doc(placeId)
           .update({ bookings: [...existingBookings, bookingPlaceData] })

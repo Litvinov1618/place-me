@@ -34,13 +34,13 @@ const AddPayment: React.FC<AddPaymentProps> = ({ onPaymentComplete, defaultPaidD
     <form onSubmit={submitPayment}>
       {paidDays &&
         <DateRangePicker
-        defaultValue={[paidDays.startDate, paidDays.endDate]}
-        minDate={paidDays.startDate}
-        maxDate={foreverFlag ? addYears(currentDay, 2) : paidDays.startDate}
-        onChange={
-          ([startDate, endDate]) => startDate && endDate && setPaidDays({ startDate, endDate })
-        }
-        shortcuts={false}
+          defaultValue={[paidDays.startDate, paidDays.endDate]}
+          minDate={paidDays.startDate}
+          maxDate={foreverFlag ? addYears(currentDay, 2) : paidDays.endDate}
+          onChange={
+            ([startDate, endDate]) => startDate && endDate && setPaidDays({ startDate, endDate })
+          }
+          shortcuts={false}
         />
       }
       <div style={{ display: 'flex' }}>

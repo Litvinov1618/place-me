@@ -13,7 +13,7 @@ import Button from './Button'
 import Card from './Card'
 import Dialog from './Dialog'
 
-const Payments: React.FC = () => {
+const PaymentsPage: React.FC = () => {
   const { payments } = usePaymentsCollection()
 
   const [dateRange, setDateRange] = useState<FiniteDateRange>()
@@ -127,4 +127,4 @@ const Payments: React.FC = () => {
   )
 }
 
-export default Payments
+export default PaymentsPage

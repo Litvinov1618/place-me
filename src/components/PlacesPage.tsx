@@ -13,7 +13,7 @@ import ButtonGroup from './ButtonGroup'
 import NumericInput from './NumericInput'
 import Dialog from './Dialog'
 
-const Places: React.FC = () => {
+const PlacesPage: React.FC = () => {
   const { places } = usePlacesCollection()
 
   const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false)
@@ -87,4 +87,4 @@ const Places: React.FC = () => {
   )
 }
 
-export default Places
+export default PlacesPage

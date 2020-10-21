@@ -19,7 +19,7 @@ import addYears from '../modules/addYears'
 import DatePicker from './DatePicker'
 import usePlaceBookings from '../modules/usePlaceBookings'
 
-const BookingItems = styled.div`
+const BookingItem = styled.div`
   padding-left: 10px;
   color: ${(props: {isActual: boolean}) => props.isActual ? 'black' : 'gray'};
 `
@@ -99,7 +99,7 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData, placeId }) => {
           if (endDate && startDate > endDate) return -1
           else return 1
         }).map((booking, index) =>
-          <BookingItems key={index} isActual={booking.startDate.toMillis() <= Date.now()}>
+          <BookingItem key={index} isActual={booking.startDate.toMillis() <= Date.now()}>
             <h4>{index + 1}</h4>
             <p>Amount: {booking.amount}</p>
             <p>First Day: {dateToString(booking.startDate.toDate())}</p>
@@ -150,7 +150,7 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData, placeId }) => {
               }
               <Button onClick={() => editBooking(booking)}>Edit</Button>
             </Dialog>
-          </BookingItems>
+          </BookingItem>
         )}
     </div>
   )

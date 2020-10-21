@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useBookingPlace from '../modules/useBookingPlace'
+import useBookingPlace from '../modules/usePlaceBookings'
 import toaster from '../modules/toaster'
 import dateToString from '../modules/dateToString'
 import AddPayment from './AddPayment'
@@ -103,15 +103,15 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
       return
     }
     book(newBooking, placeBookings)
-    .then(() => {
-      toaster.show({ message: 'The place has been booked' })
-      setDisabledFlag(false)
-      onClose()
-    })
-    .catch(({ message }) => {
-      toaster.show({ message, intent: 'danger' })
-      setDisabledFlag(false)
-    })
+      .then(() => {
+        toaster.show({ message: 'The place has been booked' })
+        setDisabledFlag(false)
+        onClose()
+      })
+      .catch(({ message }) => {
+        toaster.show({ message, intent: 'danger' })
+        setDisabledFlag(false)
+      })
   }
 
   // Managing modal windows

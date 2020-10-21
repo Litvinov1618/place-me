@@ -82,7 +82,7 @@ const Payments: React.FC = () => {
         </Button>
         {showResetButton && <Button onClick={resetFilters}>Reset filters</Button>}
       </ButtonGroup>
-      <h3 className='bp3-heading'>Total: {countTotal(payments)}</h3>
+      <h3 className='bp3-heading'>Total: {countTotal(payments)} ₴</h3>
       {payments
         .filter(payment => verifyPayments(payment.data(), dateRange))
         .map((payment) => {

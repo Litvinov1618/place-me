@@ -14,6 +14,10 @@ import createFirebaseNowTimestamp from '../modules/createFirebaseNowTimestamp'
 import BookingPlaceData from '../interfaces/BookingPlaceData'
 import FiniteDateRange from '../interfaces/FiniteDateRange'
 import toaster from '../modules/toaster'
+import CustomDateRange from '../interfaces/CustomDateRange'
+import addYears from '../modules/addYears'
+import DatePicker from './DatePicker'
+import usePlaceBookings from '../modules/usePlaceBookings'
 
 const BookingItems = styled.div`
   padding-left: 10px;
@@ -22,10 +26,12 @@ const BookingItems = styled.div`
 
 interface BookingsProps {
   placeData: PlaceData
+  placeId: string
 }
 
-const BookingsList: React.FC<BookingsProps> = ({ placeData }) => {
+const BookingsList: React.FC<BookingsProps> = ({ placeData, placeId }) => {
   const { add } = usePaymentsCollection(false)
+  const { edit } = usePlaceBookings(placeId)
 
   const createPayment = (bookingPlaceData: BookingPlaceData) => {
     const sendPayment = (amount: number, paidDays: FiniteDateRange) => {
@@ -49,8 +55,8 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData }) => {
           endDate: createFirebaseTimestampFromDate(paidDays.endDate)
         }
       })
-      .then(() => toaster.show({ message: 'Payment added successfully' }))
-      .catch(({ message }) => toaster.show({ message, intent: 'danger'}))
+        .then(() => toaster.show({ message: 'Payment added successfully' }))
+        .catch(({ message }) => toaster.show({ message, intent: 'danger'}))
     }
 
     return sendPayment
@@ -63,6 +69,29 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData }) => {
   const [isEditBookingOpen, setIsEditBookingOpen] = useState(false)
   const onEditBookingOpen = () => setIsEditBookingOpen(true)
   const onEditBookingClose = () => setIsEditBookingOpen(false)
+
+  const [editBookingDates, setEditBookingDates] = useState<CustomDateRange>()
+
+  const editBooking = (booking: BookingPlaceData) => {
+    const newBookings = placeData.bookings.map((existingBooking) => {
+      if (existingBooking !== booking) return existingBooking
+      if (editBookingDates) {
+        existingBooking.startDate = createFirebaseTimestampFromDate(editBookingDates.startDate)
+        if (editBookingDates.endDate) existingBooking.endDate = createFirebaseTimestampFromDate(editBookingDates.endDate)
+        else existingBooking.endDate = null
+      }
+      return existingBooking
+    })
+
+    edit(newBookings)
+      .then(() => toaster.show({ message: 'Booking edited' }))
+      .catch(({ message }) => toaster.show({ message, intent: 'danger' }))
+
+    onEditBookingClose()
+  }
+
+  const [foreverFlag, setForeverFlag] = useState(false)
+  const toggleForeverFlag = () => setForeverFlag(!foreverFlag)
 
   return (
     <div>
@@ -97,9 +126,29 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData }) => {
               />
             </Dialog>
             <Dialog title='Edit booking' isOpen={isEditBookingOpen} onClose={onEditBookingClose}>
-              <Checkbox>Forever booking</Checkbox>
-              <DateRangePicker shortcuts={false} minDate={booking.startDate.toDate()} />
-              <Button onClick={onEditBookingClose}>Edit</Button>
+              <Checkbox checked={foreverFlag} onChange={toggleForeverFlag}>Forever booking</Checkbox>
+              {foreverFlag
+              ? <DatePicker
+                  onChange={(startDate) => startDate && setEditBookingDates({ startDate, endDate: null })}
+                  minDate={booking.startDate.toDate()}
+                  maxDate={addYears(booking.startDate.toDate(), 2)}
+                  highlightCurrentDay
+                  defaultValue={booking.startDate.toDate()}
+                />
+              : <DateRangePicker
+                  shortcuts={false}
+                  minDate={booking.startDate.toDate()}
+                  maxDate={addYears(booking.startDate.toDate(), 2)}
+                  defaultValue={booking.endDate
+                    ? [booking.startDate.toDate(), booking.endDate.toDate()]
+                    : [booking.startDate.toDate(), null]
+                  }
+                  onChange={
+                    ([startDate, endDate]) => startDate && endDate && setEditBookingDates({ startDate, endDate })
+                  }
+                />
+              }
+              <Button onClick={() => editBooking(booking)}>Edit</Button>
             </Dialog>
           </BookingItems>
         )}

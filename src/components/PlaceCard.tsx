@@ -22,7 +22,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
   const [isEditPlaceOpen, setIsEditPlaceOpen] = useState(false)
   const onEditPlaceClose = () => setIsEditPlaceOpen(false)
   const onEditPlaceOpen = () => setIsEditPlaceOpen(true)
-  
+
   const [isBookingPlaceOpen, setIsBookingPlaceOpen] = useState(false)
   const onBookingPlaceOpen = () => setIsBookingPlaceOpen(true)
   const onBookingPlaceClose = () => setIsBookingPlaceOpen(false)
@@ -37,8 +37,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
 
   const removePlace = () => {
     remove(placeId)
-    .then(() => toaster.show({ message: 'Place deleted.' }))
-    .catch(({ message }) => toaster.show({ message, intent: 'warning' }))
+      .then(() => toaster.show({ message: 'Place deleted.' }))
+      .catch(({ message }) => toaster.show({ message, intent: 'warning' }))
   }
 
   return (
@@ -58,7 +58,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         isOpen={isViewPlaceOpen}
         onClose={onViewPlaceClose}
       >
-        <BookingsList placeData={placeData} />
+        <BookingsList placeData={placeData} placeId={placeId} />
       </Dialog>
       <Dialog
         title='Edit Place'
@@ -93,7 +93,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeId, placeData }) => {
         onConfirm={removePlace}
         intent='danger'
       >
-        <p>Are you sure you want to delete this place?</p>
+        Are you sure you want to delete this place?
       </Alert>
     </div>
   )

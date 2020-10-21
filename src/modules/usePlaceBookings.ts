@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import firestoreCollection from './firestoreCollection'
 import firebase from './firebase'
-import usePaymentsCollection from '../modules/usePaymentsCollection'
+import usePaymentsCollection from './usePaymentsCollection'
 import BookingPlaceData from '../interfaces/BookingPlaceData'
 import createFirebaseNowTimestamp from './createFirebaseNowTimestamp'
 
-const useBookingPlace = (placeId: string) => {
+const usePlaceBookings = (placeId: string) => {
   const [collection] = useState(() => firestoreCollection('places'))
 
   const { add } = usePaymentsCollection(false)
@@ -39,7 +39,15 @@ const useBookingPlace = (placeId: string) => {
       })
   }
 
-  return { book }
+  const edit = (newBookings: BookingPlaceData[]) => {
+    return collection
+      .doc(placeId)
+      .update({ bookings: newBookings })
+      .then(() => console.log('Booking edited'))
+      .catch(error => console.log(error))
+  }
+
+  return { book, edit }
 }
 
-export default useBookingPlace
+export default usePlaceBookings

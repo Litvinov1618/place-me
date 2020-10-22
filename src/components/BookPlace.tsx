@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useBookingPlace from '../modules/usePlaceBookings'
 import toaster from '../modules/toaster'
 import dateToString from '../modules/dateToString'
@@ -7,12 +7,12 @@ import BookingPlaceData from '../interfaces/BookingPlaceData'
 import FiniteDateRange from '../interfaces/FiniteDateRange'
 import CustomDateRange from '../interfaces/CustomDateRange'
 import Button from './Button'
-import InputGroup from './InputGroup'
 import Checkbox from './Checkbox'
 import Dialog from './Dialog'
 import createFirebaseTimestampFromDate  from '../modules/createFirebaseTimestampFromDate'
 import calculateDefaultPaidDays from '../modules/calculateDefaultPaidDays'
 import AddBookingDates from './AddBookingDates'
+import useMembersCollection from '../modules/useMembersCollection'
 
 interface BookPlaceProps {
   placeId: string
@@ -20,6 +20,7 @@ interface BookPlaceProps {
   placeBookings: BookingPlaceData[]
   placeName: string
 }
+
 
 const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, placeName }) => {
   // Working with dates
@@ -33,19 +34,6 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
       setBookingDateRange(bookingDateRange)
       setPaidDays(calculateDefaultPaidDays(bookingDateRange))
     }
-  }
-
-  // Getting info from inputs
-  const [visitorName, setVisitorName] = useState<string>('')
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setVisitorName(event.target.value)
-
-  const [amount, setAmount] = useState<number>()
-
-  const [disabledFlag, setDisabledFlag] = useState(false)
-
-  const setPayment = (amount: number, paidDays: FiniteDateRange) => {
-    setAmount(amount)
-    setPaidDays(paidDays)
   }
 
   // Getting and sending data with firebase
@@ -114,6 +102,32 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
       })
   }
 
+  // Getting info from inputs
+  const { members } = useMembersCollection()
+
+  const [visitorName, setVisitorName] = useState('')
+
+  const [membersNames, setMembersNames] = useState<string[]>([])
+  useEffect(() => {
+    if (members) {
+      const membersNamesData: string[] = []
+      members.forEach(member => membersNamesData.push(member.data().name))
+      setMembersNames(membersNamesData)
+      console.log(membersNamesData)
+    }
+  }, [members])
+
+  const renderItem = (item: string) => <span>{item}</span>
+
+  const [amount, setAmount] = useState<number>()
+
+  const [disabledFlag, setDisabledFlag] = useState(false)
+
+  const setPayment = (amount: number, paidDays: FiniteDateRange) => {
+    setAmount(amount)
+    setPaidDays(paidDays)
+  }
+
   // Managing modal windows
   const [isBookingDatesOpen, setIsBookingDatesOpen] = useState(false)
   const onBookingDatesOpen = () => setIsBookingDatesOpen(true)
@@ -133,23 +147,17 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
           label='Forever booking'
         />
         <Button disabled={disabledFlag} onClick={onBookingDatesOpen}>
-          {bookingDateRange ?
-            `Booked Days: ${dateToString(bookingDateRange.startDate)} - 
-            ${bookingDateRange?.endDate ? dateToString(bookingDateRange.endDate) : 'Forever'}` :
-            'Choose Booking Dates'
+          {bookingDateRange
+            ? `Booked Days: ${dateToString(bookingDateRange.startDate)} - 
+            ${bookingDateRange?.endDate ? dateToString(bookingDateRange.endDate) : 'Forever'}`
+            : 'Choose Booking Dates'
           }
         </Button>
-        <InputGroup 
-          required
-          disabled={disabledFlag}
-          placeholder='Name'
-          value={visitorName}
-          onChange={onNameChange}
-        />
+        {JSON.stringify(membersNames)}
         <Button onClick={onPaymentOpen} disabled={disabledFlag || !bookingDateRange}>
-          {paidDays ?
-            `Paid days: ${dateToString(paidDays.startDate)} - ${dateToString(paidDays.endDate)}` :
-            'Add payment'
+          {paidDays
+            ? `Paid days: ${dateToString(paidDays.startDate)} - ${dateToString(paidDays.endDate)}`
+            : 'Add payment'
           }
         </Button>
         <Button type='submit' disabled={!bookingDateRange || !paidDays || !visitorName || !amount || disabledFlag}>

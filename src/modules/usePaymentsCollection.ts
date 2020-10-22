@@ -19,7 +19,7 @@ const usePaymentsCollection = (withData = true) => {
   const add = (paymentData: PaymentData) => {
     return collection
       .add(paymentData)
-      .then(() => console.log('New place added.'))
+      .then(() => console.log('New place added'))
       .catch((error) => console.log(error))
   }
 

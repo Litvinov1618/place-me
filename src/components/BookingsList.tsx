@@ -97,8 +97,8 @@ const BookingsList: React.FC<BookingsProps> = ({ placeData, placeId }) => {
   return (
     <div>
       {placeData.bookings.sort(({ startDate }, { endDate }) => {
-          if (endDate && startDate > endDate) return -1
-          else return 1
+          if (checkIsActualBooking(startDate, endDate)) return -1
+          return 1
         }).map((booking, index) =>
           <BookingItem key={index} isActual={checkIsActualBooking(booking.startDate, booking.endDate)}>
             <h4>{index + 1}</h4>

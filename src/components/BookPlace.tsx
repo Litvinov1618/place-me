@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useBookingPlace from '../modules/usePlaceBookings'
 import toaster from '../modules/toaster'
 import dateToString from '../modules/dateToString'
@@ -39,14 +39,6 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
 
   // Getting info from inputs
   const { members } = useMembersCollection()
-  const [membersNames, setMembersNames] = useState<string[]>([])
-  useEffect(() => {
-    if (members) {
-      const membersNamesData: string[] = []
-      members.forEach(member => membersNamesData.push(member.data().name))
-      setMembersNames(membersNamesData)
-    }
-  }, [members])
 
   const [visitorName, setVisitorName] = useState('')
   const [visitorId, setVisitorId] = useState('')
@@ -54,7 +46,7 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
   const addMemberValue = 'Add new member'
 
   const onSelectUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value
+    const value = JSON.parse(event.target.value)
 
     if(value === addMemberValue) {
       onAddMemberOpen()
@@ -66,7 +58,8 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
       return
     }
 
-    setVisitorName(value)
+    setVisitorName(value.name)
+    setVisitorId(value.id)
   }
 
   const onMemberAdded = (name: string, id: string) => {
@@ -187,7 +180,11 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
           disabled={disabledFlag}
         >
           <option value={placeholderValue} selected>Choose user</option>
-          {membersNames.map(name => <option key={'id' + name} value={name}>{name}</option>)}
+          {members.map(member =>
+            <option key={member.id} id={member.id} value={JSON.stringify({ name: member.data().name, id: member.id })}>
+              {member.data().name}
+            </option>
+          )}
           <option value={addMemberValue}>{addMemberValue}</option>
         </select>
         <Dialog

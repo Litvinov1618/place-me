@@ -5,6 +5,7 @@ interface BookingPlaceData {
   startDate: Timestamp
   endDate: Timestamp | null
   visitorName: string
+  visitorId: string
   placeName: string
   amount: number
   paidDays: FiniteTimestampRange

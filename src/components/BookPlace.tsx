@@ -7,12 +7,13 @@ import BookingPlaceData from '../interfaces/BookingPlaceData'
 import FiniteDateRange from '../interfaces/FiniteDateRange'
 import CustomDateRange from '../interfaces/CustomDateRange'
 import Button from './Button'
-import InputGroup from './InputGroup'
 import Checkbox from './Checkbox'
 import Dialog from './Dialog'
 import createFirebaseTimestampFromDate  from '../modules/createFirebaseTimestampFromDate'
 import calculateDefaultPaidDays from '../modules/calculateDefaultPaidDays'
 import AddBookingDates from './AddBookingDates'
+import useMembersCollection from '../modules/useMembersCollection'
+import AddMember from './AddMember'
 
 interface BookPlaceProps {
   placeId: string
@@ -20,6 +21,7 @@ interface BookPlaceProps {
   placeBookings: BookingPlaceData[]
   placeName: string
 }
+
 
 const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, placeName }) => {
   // Working with dates
@@ -36,8 +38,35 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
   }
 
   // Getting info from inputs
-  const [visitorName, setVisitorName] = useState<string>('')
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setVisitorName(event.target.value)
+  const { members } = useMembersCollection()
+
+  const [visitorName, setVisitorName] = useState('')
+  const [visitorId, setVisitorId] = useState('')
+  const placeholderValue = 'Choose user'
+  const addMemberValue = 'Add new member'
+
+  const onSelectUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = JSON.parse(event.target.value)
+
+    if(value === addMemberValue) {
+      onAddMemberOpen()
+      return
+    }
+
+    if (value === placeholderValue) {
+      setVisitorName('')
+      return
+    }
+
+    setVisitorName(value.name)
+    setVisitorId(value.id)
+  }
+
+  const onMemberAdded = (name: string, id: string) => {
+    setVisitorName(name)
+    setVisitorId(id)
+    onAddMemberClose()
+  }
 
   const [amount, setAmount] = useState<number>()
 
@@ -89,6 +118,7 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
       startDate: createFirebaseTimestampFromDate(bookingDateRange.startDate),
       endDate: bookingDateRange.endDate ? createFirebaseTimestampFromDate(bookingDateRange.endDate) : null,
       visitorName,
+      visitorId,
       placeName,
       amount,
       paidDays: {
@@ -123,6 +153,10 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
   const onPaymentOpen = () => setIsPaymentOpen(true)
   const onPaymentClose = () => setIsPaymentOpen(false)
 
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false)
+  const onAddMemberOpen = () => setIsAddMemberOpen(true)
+  const onAddMemberClose = () => setIsAddMemberOpen(false)
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -133,23 +167,37 @@ const BookPlace: React.FC<BookPlaceProps> = ({ onClose, placeId, placeBookings, 
           label='Forever booking'
         />
         <Button disabled={disabledFlag} onClick={onBookingDatesOpen}>
-          {bookingDateRange ?
-            `Booked Days: ${dateToString(bookingDateRange.startDate)} - 
-            ${bookingDateRange?.endDate ? dateToString(bookingDateRange.endDate) : 'Forever'}` :
-            'Choose Booking Dates'
+          {bookingDateRange
+            ? `Booked Days: ${dateToString(bookingDateRange.startDate)} - 
+            ${bookingDateRange?.endDate ? dateToString(bookingDateRange.endDate) : 'Forever'}`
+            : 'Choose Booking Dates'
           }
         </Button>
-        <InputGroup 
-          required
-          disabled={disabledFlag}
-          placeholder='Name'
+        <select
           value={visitorName}
-          onChange={onNameChange}
-        />
+          required
+          onChange={onSelectUserChange}
+          disabled={disabledFlag}
+        >
+          <option value={placeholderValue} selected>Choose user</option>
+          {members.map(member =>
+            <option key={member.id} id={member.id} value={JSON.stringify({ name: member.data().name, id: member.id })}>
+              {member.data().name}
+            </option>
+          )}
+          <option value={addMemberValue}>{addMemberValue}</option>
+        </select>
+        <Dialog
+          isOpen={isAddMemberOpen}
+          onClose={onAddMemberClose}
+          title='Add new member'
+        >
+          <AddMember onMemberAdded={onMemberAdded} />
+        </Dialog>
         <Button onClick={onPaymentOpen} disabled={disabledFlag || !bookingDateRange}>
-          {paidDays ?
-            `Paid days: ${dateToString(paidDays.startDate)} - ${dateToString(paidDays.endDate)}` :
-            'Add payment'
+          {paidDays
+            ? `Paid days: ${dateToString(paidDays.startDate)} - ${dateToString(paidDays.endDate)}`
+            : 'Add payment'
           }
         </Button>
         <Button type='submit' disabled={!bookingDateRange || !paidDays || !visitorName || !amount || disabledFlag}>

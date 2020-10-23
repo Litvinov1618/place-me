@@ -5,10 +5,10 @@ import Button from './Button'
 import InputGroup from './InputGroup'
 
 interface AddNewMemberProps {
-  onMemberAdded: () => void
+  onMemberAdded: (name: string, id: string) => void
 }
 
-const AddNewMember: React.FC<AddNewMemberProps> = ({ onMemberAdded }) => {
+const AddMember: React.FC<AddNewMemberProps> = ({ onMemberAdded }) => {
   const { add } = useMembersCollection(false)
 
   const [name, setName] = useState('')
@@ -31,10 +31,10 @@ const AddNewMember: React.FC<AddNewMemberProps> = ({ onMemberAdded }) => {
       number,
       bookings: []
     })
-      .then(() => {
+      .then((id) => {
         toaster.show({ message: 'New member added' })
         setDisabledFlag(false)
-        onMemberAdded()
+        onMemberAdded(name, id)
       })
       .catch(({ message }) => {
         toaster.show({ message, intent: 'danger' })
@@ -70,4 +70,4 @@ const AddNewMember: React.FC<AddNewMemberProps> = ({ onMemberAdded }) => {
   )
 }
 
-export default AddNewMember
+export default AddMember

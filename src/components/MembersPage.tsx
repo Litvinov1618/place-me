@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import styled from 'styled-components'
 import useMembersCollection from '../modules/useMembersCollection'
-import AddNewMember from './AddNewMember'
+import AddMember from './AddMember'
 import Button from './Button'
 import Card from './Card'
 import Dialog from './Dialog'
@@ -22,7 +22,6 @@ const MembersPage: React.FC = () => {
   const onAddNewMemberClose = () => setIsAddNewMemberOpen(false)
   const onAddNewMemberOpen = () => setIsAddNewMemberOpen(true)
 
-
   return (
     <div>
       <Navbar>
@@ -36,10 +35,10 @@ const MembersPage: React.FC = () => {
         isOpen={isAddNewMemberOpen}
         onClose={onAddNewMemberClose}
       >
-        <AddNewMember onMemberAdded={onAddNewMemberClose} />
+        <AddMember onMemberAdded={onAddNewMemberClose} />
       </Dialog>
       {members.map(member =>
-        <Card>
+        <Card key={member.id}>
           <p>
             Username: {member.data().name}
           </p>

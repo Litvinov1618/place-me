@@ -1,15 +1,7 @@
-import { QueryDocumentSnapshot } from '@firebase/firestore-types'
 import { useEffect, useState } from 'react'
 import firestoreCollection from './firestoreCollection'
-
-interface MemberData {
-  name: string
-  email: string
-  number: string
-  bookings: []
-}
-
-type MembersSnapshot = QueryDocumentSnapshot<MemberData>
+import MemberData from '../interfaces/MemberData'
+import MembersSnapshot from '../interfaces/MembersSnapshot'
 
 const useMembersCollection = (withData = true) => {
   const [collection] = useState(() => firestoreCollection<MemberData>('members'))
@@ -23,7 +15,10 @@ const useMembersCollection = (withData = true) => {
   const add = (memberData: MemberData) => {
     return collection
       .add(memberData)
-      .then(() => console.log('New member added'))
+      .then((docRef) => {
+        console.log('New member added')
+        return docRef.id
+      })
       .catch((error) => {
         console.log(error)
         throw error
